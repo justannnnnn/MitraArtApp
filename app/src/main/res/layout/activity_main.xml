@@ -56,6 +56,26 @@
             app:showNavigationButtons="false" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="118dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="30dp"
+        android:gravity="bottom"
+        android:text="@string/promo_lots"
+        android:textAppearance="@style/text_style_h2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lin_lay" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_promolots"
+        android:layout_width="match_parent"
+        android:layout_height="196dp"
+        android:padding="2dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
