@@ -37,11 +37,16 @@ class MainActivity : AppCompatActivity() {
         binding.promolotsRecyclerView.adapter = adapter
         binding.promolotsRecyclerView.layoutManager = LinearLayoutManager(this)*/
 
-        val rvLots = findViewById<View>(R.id.promolots_RecyclerView) as RecyclerView
+        val rvLots1 = findViewById<View>(R.id.promolots1_RecyclerView) as RecyclerView
         lots = lotService.getLots()
-        val adapter = LotAdapter(lots)
-        rvLots.adapter = adapter
-        rvLots.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val adapter1 = LotAdapter(lots)
+        rvLots1.adapter = adapter1
+        rvLots1.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        val rvLots2 = findViewById<View>(R.id.promolots2_RecyclerView) as RecyclerView
+        val adapter2 = LotAdapter(lots)
+        rvLots2.adapter = adapter2
+        rvLots2.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         // Carousel(each 3 sec changes)
         val carousel: ImageCarousel = findViewById(R.id.carousel)
