@@ -5,26 +5,20 @@ class LotService {
 
         init {
 
-            lots = (1..7).map {
+            lots = (0..6).map {
                 Lot(
                     id = it.toLong(),
                     name = "Name" + it.toString(),
                     author  = "Author" + (it % 5).toString(),
                     price = it*10000.0,
-                    image = IMAGES[it]
+                    imageRes = IMAGES[it]
                 )
             }.toMutableList()
         }
 
+    fun getLots(): List<Lot> = lots
+
         companion object {
-            private val IMAGES = mutableListOf(
-                "images/image 15263.png",
-                "images/image 15264.png",
-                "images/image 15267.png",
-                "images/image 15268.png",
-                "images/Донбасс-израненная-земля-1080-762x1024 1.png",
-                "images/Донбасс-израненная-земля-1080-762x1024 2.png",
-                "images/Слой_22_xA0_Изображение.png"
-            )
+            private val IMAGES = mutableListOf(R.drawable.lot_1, R.drawable.lot_2, R.drawable.lot_3, R.drawable.lot_4, R.drawable.lot_5, R.drawable.lot_6, R.drawable.lot_7)
         }
 }

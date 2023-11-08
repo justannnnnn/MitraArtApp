@@ -7,5 +7,5 @@ data class Lot(
     val name: String, // Имя произведения
     val author: String, // Автор
     val price: Double, // Цена
-    val image: String // картинка
+    val imageRes: Int // картинка
 )
