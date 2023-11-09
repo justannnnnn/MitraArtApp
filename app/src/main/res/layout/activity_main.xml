@@ -24,7 +24,7 @@
                 android:layout_marginStart="5dp"
                 android:padding="10dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
                 android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/main_searchView"
@@ -39,7 +39,7 @@
                 android:background="@drawable/search_background"
                 android:paddingTop="6dp"
                 android:paddingBottom="7dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:searchIcon="@drawable/ic_search"
                 app:layout_constraintEnd_toStartOf="@+id/notification_imageButton"
@@ -111,16 +111,17 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-    android:id="@+id/bottom_menu"
-    android:layout_width="match_parent"
-    android:layout_height="65dp"
-    android:layout_alignParentBottom="true"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    android:background="@color/grey"
-    app:menu="@menu/bottom_nav_menu"
-        app:itemTextColor="@color/grey" />
+        android:id="@+id/bottom_menu"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/grey"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemTextColor="@color/grey"
+        app:itemActiveIndicatorStyle="@color/grey"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

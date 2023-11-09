@@ -1,22 +1,12 @@
 package com.example.mitraartapp
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
-import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.ImageButton
-import android.widget.ImageSwitcher
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ViewSwitcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mitraartapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import me.relex.circleindicator.CircleIndicator2
 import org.imaginativeworld.whynotimagecarousel.ImageCarousel
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
 
