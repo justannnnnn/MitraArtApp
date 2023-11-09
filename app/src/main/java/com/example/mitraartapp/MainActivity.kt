@@ -1,5 +1,6 @@
 package com.example.mitraartapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -62,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         // Bottom menu
         loadFragment(HomeFragment())
         bottomNav = findViewById(R.id.bottom_menu) as BottomNavigationView
+        bottomNav.setSelectedItemId(R.id.home);
         bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> {
@@ -78,6 +80,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.account -> {
                     loadFragment(AccountFragment())
+                    val intent = Intent(this@MainActivity, RegisteredAccountActivity::class.java)
+                    startActivity(intent)
                     true
                 }
 
@@ -89,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 
     private  fun loadFragment(fragment: Fragment){
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.ll2,fragment)
+        //transaction.replace(R.id.ll2,fragment)
         transaction.commit()
 }
 }
