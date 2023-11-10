@@ -4,4 +4,11 @@
 
     <string name="settings_account_button">Настройки аккаунта</string>
     <string name="my_activity">Моя активность</string>
+    <string name="favourite">Избранное</string>
+    <string name="my_finances">Мои финансы</string>
+    <string name="my_messages">Мои сообщения</string>
+    <string name="delivery_address">Доставка и адреса</string>
+    <string name="black_list">Черный список</string>
+    <string name="ask_question">Задать вопрос</string>
+    <string name="FAQ">FAQ</string>
 </resources>
