@@ -2,7 +2,7 @@
     <string name="app_name">MitraArtApp</string>
     <string name="promo_lots">Промо лоты</string>
 
-    <string name="settings_account_button">Настройки аккаунта</string>
+    <string name="settings_account">Настройки аккаунта</string>
     <string name="my_activity">Моя активность</string>
     <string name="favourite">Избранное</string>
     <string name="my_finances">Мои финансы</string>
@@ -11,4 +11,10 @@
     <string name="black_list">Черный список</string>
     <string name="ask_question">Задать вопрос</string>
     <string name="FAQ">FAQ</string>
+
+    <string name="settings_user_account">Настройки учетной записи</string>
+    <string name="vacation_mode">Режим «Отпуск»</string>
+    <string name="watermarks">Водяные знаки</string>
+    <string name="standart_description_lot">Стандартные описания лотов</string>
+    <string name="downloaded_docs">Загруженные документы</string>
 </resources>
