@@ -1,16 +1,10 @@
-package com.example.mitraartapp.ui
+package com.example.mitraartapp
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
-import com.example.mitraartapp.AccountFragment
-import com.example.mitraartapp.CartFragment
-import com.example.mitraartapp.HomeFragment
-import com.example.mitraartapp.MainActivity
-import com.example.mitraartapp.MoreFragment
-import com.example.mitraartapp.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AccountSettingsActivity : AppCompatActivity() {

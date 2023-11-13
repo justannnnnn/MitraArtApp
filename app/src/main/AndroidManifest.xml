@@ -16,7 +16,7 @@
         android:theme="@style/Theme.MitraArtApp"
         tools:targetApi="31">
         <activity
-            android:name=".ui.AccountSettingsActivity"
+            android:name=".AccountSettingsActivity"
             android:exported="false" />
         <activity
             android:name=".RegisteredAccountActivity"

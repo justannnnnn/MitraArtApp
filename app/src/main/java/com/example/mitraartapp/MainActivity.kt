@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         )
         carousel.addData(list)
 
+
+
         /*// LayoutManager
         adapter = LotAdapter() // Создание объекта
         adapter.data = lotService.getLots()// Заполнение данными
