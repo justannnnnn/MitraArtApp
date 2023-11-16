@@ -8,47 +8,42 @@ import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class AccountSettingsActivity : AppCompatActivity() {
-    lateinit var bottomNav : BottomNavigationView
+class MyActivityActivity : AppCompatActivity() {
+    lateinit var bottomNav:BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_account_settings)
+        setContentView(R.layout.activity_my_activity)
 
         // Back button
         var backButton = findViewById<ImageButton>(R.id.back_button)
-        backButton.setOnClickListener{
+        backButton.setOnClickListener {
             finish()
         }
 
-        // Account setting button
-        var buttonSettings = findViewById<Button>(R.id.settings_user_account_button)
-        buttonSettings.setOnClickListener{
+        // My lots button
+        var buttonMyLots = findViewById<Button>(R.id.my_lots_button)
+        buttonMyLots.setOnClickListener{
 
         }
 
-        // Vacation mode button
-        var buttonVacationMode = findViewById<Button>(R.id.vacation_mode_button)
-        buttonVacationMode.setOnClickListener{
+        // Lots with my bids button
+        var buttonLotsMyBids = findViewById<Button>(R.id.lots_with_my_bids_button)
+        buttonLotsMyBids.setOnClickListener{
 
         }
 
-        // Watermarks button
-        var buttonWatermarks = findViewById<Button>(R.id.watermarks_button)
-        buttonWatermarks.setOnClickListener{
+        // My sells button
+        var buttonMySells = findViewById<Button>(R.id.my_sells_button)
+        buttonMySells.setOnClickListener{
 
         }
 
-        // Standard lot's description button
-        var buttonLotDecription = findViewById<Button>(R.id.standart_descript_button)
-        buttonLotDecription.setOnClickListener{
+        // My shops button
+        var buttonMyShops = findViewById<Button>(R.id.my_shops_button)
+        buttonMyShops.setOnClickListener{
 
         }
 
-        // Downloaded docs button
-        var buttonDownloadedDocs = findViewById<Button>(R.id.downloaded_docs_button)
-        buttonDownloadedDocs.setOnClickListener{
-
-        }
 
         // Bottom menu
         loadFragment(HomeFragment())
@@ -58,18 +53,21 @@ class AccountSettingsActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.home -> {
                     loadFragment(HomeFragment())
-                    val intent = Intent(this@AccountSettingsActivity, MainActivity::class.java)
+                    val intent = Intent(this@MyActivityActivity, MainActivity::class.java)
                     startActivity(intent)
                     true
                 }
+
                 R.id.more -> {
                     loadFragment(MoreFragment())
                     true
                 }
+
                 R.id.cart -> {
                     loadFragment(CartFragment())
                     true
                 }
+
                 R.id.account -> {
                     loadFragment(AccountFragment())
                     finish()
@@ -77,12 +75,15 @@ class AccountSettingsActivity : AppCompatActivity() {
                 }
 
 
-                else -> {true}
+                else -> {
+                    true
+                }
             }
         }
     }
 
-    private  fun loadFragment(fragment: Fragment){
+
+    private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         //transaction.replace(R.id.ll2,fragment)
         transaction.commit()

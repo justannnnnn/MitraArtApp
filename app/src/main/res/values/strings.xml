@@ -17,4 +17,59 @@
     <string name="watermarks">Водяные знаки</string>
     <string name="standart_description_lot">Стандартные описания лотов</string>
     <string name="downloaded_docs">Загруженные документы</string>
+
+    <string name="welcome_in_mitra">Добро пожаловать
+в Митра. ART</string>
+    <string name="enter_by_login">Войти через Email или логин</string>
+    <string name="or">или</string>
+    <string name="enter_by_vk">Войти через ВК</string>
+    <string name="enter_by_google">Войти через Google</string>
+    <string name="do_you_have_account">У вас ещё нет аккаунта? Давайте его создадим!</string>
+    <string name="lets_create_it">Создать учётную запись</string>
+    <string name="confirmation">Подтверждение</string>
+    <string name="confirm_text1">Для подтверждения Вашей электронной почты, пожалуйста, пройдите по ссылке, которая была отправлена на Ваш адрес электронной почты.</string>
+    <string name="confirm_text2">После подтверждения вы сможете использовать все функции приложения</string>
+    <string name="confirm_text3">Если на почту ничего не пришло, нажмите</string>
+    <string name="send_again">отправить повторно</string>
+
+    <string name="of_buyers">Покупателей</string>
+    <string name="of_sellers">Продавцов</string>
+    <string name="rate_limit">Ограничение по рейтингу</string>
+
+    <string name="my_lots">Мои лоты</string>
+    <string name="lots_with_my_bids">Лоты с моими ставками</string>
+    <string name="my_sells">Мои продажи</string>
+    <string name="my_shops">Мои покупки</string>
+
+    <string name="rate">Тариф</string>
+    <string name="my_bill">Мой счет</string>
+    <string name="operation_history">История операций</string>
+    <string name="promotion_service">Услуги продвижения</string>
+
+    <string name="registration">Регистрация</string>
+    <string name="surname">Ваша фамилия</string>
+    <string name="name">Ваше имя</string>
+    <string name="patronymic">Ваше отчество</string>
+    <string name="man">мужской</string>
+    <string name="woman">женский</string>
+    <string name="email">Ваш email</string>
+    <string name="phone">Ваш номер телефона</string>
+    <string name="create_password">Придумайте пароль более 8 символов</string>
+    <string name="repeat_password">Повторите Ваш пароль</string>
+    <string name="i_am_18">Мне исполнилось 18</string>
+    <string name="want_receive_notif">Хочу получать уведомления и новости на E-mail</string>
+    <string name="informed_agreed">Ознакомлен и согласен с политикой обработки персональных данных и принимаю пользовательское соглашение</string>
+    <string name="to_continue">Продолжить</string>
+
+    <string name="describe_your_problem">Опишите Вашу проблему</string>
+    <string name="send_request">Отправить заявку</string>
+    <string name="agreement_data">Нажимая «Отправить заявку», вы даёте согласие на обработку ваших персональных данных</string>
+
+    <string name="entry_in_account">Вход в аккаунт</string>
+    <string name="your_login">Введите Ваш логин</string>
+    <string name="your_password">Введите Ваш пароль</string>
+    <string name="enter">Войти</string>
+    <string name="forget_login_or_password">Забыли логин или пароль?</string>
+
+
 </resources>

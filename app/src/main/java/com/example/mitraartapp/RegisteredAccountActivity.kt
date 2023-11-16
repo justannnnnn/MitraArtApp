@@ -20,6 +20,58 @@ class RegisteredAccountActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        //My Activity button
+        var buttonMyActivity = findViewById<Button>(R.id.my_activity_button)
+        buttonMyActivity.setOnClickListener{
+            val intent = Intent(this@RegisteredAccountActivity, MyActivityActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Favourite button
+        var buttonFavourite = findViewById<Button>(R.id.favourite_button)
+        buttonFavourite.setOnClickListener{
+
+        }
+
+        // My finances button
+        var buttonMyFinances = findViewById<Button>(R.id.my_finances_button)
+        buttonMyFinances.setOnClickListener{
+            val intent = Intent(this@RegisteredAccountActivity, MyFinancesActivity::class.java)
+            startActivity(intent)
+        }
+
+        // My messages button
+        var buttonMyMessages = findViewById<Button>(R.id.my_messages_button)
+        buttonMyMessages.setOnClickListener{
+
+        }
+
+        // Delivery button
+        var buttonDelivery = findViewById<Button>(R.id.delivery_button)
+        buttonDelivery.setOnClickListener{
+
+        }
+
+        // Black list button
+        var buttonBlackList = findViewById<Button>(R.id.black_list_button)
+        buttonBlackList.setOnClickListener{
+            val intent = Intent(this@RegisteredAccountActivity, BlackListActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Ask question button
+        var buttonAsk = findViewById<Button>(R.id.ask_quest_button)
+        buttonAsk.setOnClickListener{
+            val intent = Intent(this@RegisteredAccountActivity, AskQuestionActivity::class.java)
+            startActivity(intent)
+        }
+
+        // FAQ button
+        var buttonFAQ = findViewById<Button>(R.id.faq_button)
+        buttonFAQ.setOnClickListener{
+
+        }
+
         // Bottom menu
         loadFragment(HomeFragment())
         bottomNav = findViewById(R.id.bottom_menu) as BottomNavigationView

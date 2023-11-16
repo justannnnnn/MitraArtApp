@@ -3,51 +3,20 @@ package com.example.mitraartapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class AccountSettingsActivity : AppCompatActivity() {
-    lateinit var bottomNav : BottomNavigationView
+class AskQuestionActivity : AppCompatActivity() {
+    lateinit var bottomNav: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_account_settings)
+        setContentView(R.layout.activity_ask_question)
 
         // Back button
         var backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener{
             finish()
-        }
-
-        // Account setting button
-        var buttonSettings = findViewById<Button>(R.id.settings_user_account_button)
-        buttonSettings.setOnClickListener{
-
-        }
-
-        // Vacation mode button
-        var buttonVacationMode = findViewById<Button>(R.id.vacation_mode_button)
-        buttonVacationMode.setOnClickListener{
-
-        }
-
-        // Watermarks button
-        var buttonWatermarks = findViewById<Button>(R.id.watermarks_button)
-        buttonWatermarks.setOnClickListener{
-
-        }
-
-        // Standard lot's description button
-        var buttonLotDecription = findViewById<Button>(R.id.standart_descript_button)
-        buttonLotDecription.setOnClickListener{
-
-        }
-
-        // Downloaded docs button
-        var buttonDownloadedDocs = findViewById<Button>(R.id.downloaded_docs_button)
-        buttonDownloadedDocs.setOnClickListener{
-
         }
 
         // Bottom menu
@@ -58,7 +27,7 @@ class AccountSettingsActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.home -> {
                     loadFragment(HomeFragment())
-                    val intent = Intent(this@AccountSettingsActivity, MainActivity::class.java)
+                    val intent = Intent(this@AskQuestionActivity, MainActivity::class.java)
                     startActivity(intent)
                     true
                 }

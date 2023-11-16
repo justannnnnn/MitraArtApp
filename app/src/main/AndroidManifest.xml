@@ -16,6 +16,30 @@
         android:theme="@style/Theme.MitraArtApp"
         tools:targetApi="31">
         <activity
+            android:name=".LoginEntryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AskQuestionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegistrationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyFinancesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyActivityActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BlackListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EmailConfirmationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FirstEntryActivity"
+            android:exported="false" />
+        <activity
             android:name=".AccountSettingsActivity"
             android:exported="false" />
         <activity

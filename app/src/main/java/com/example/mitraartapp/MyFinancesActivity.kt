@@ -8,11 +8,11 @@ import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class AccountSettingsActivity : AppCompatActivity() {
-    lateinit var bottomNav : BottomNavigationView
+class MyFinancesActivity : AppCompatActivity() {
+    lateinit var bottomNav:BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_account_settings)
+        setContentView(R.layout.activity_my_finances)
 
         // Back button
         var backButton = findViewById<ImageButton>(R.id.back_button)
@@ -20,33 +20,27 @@ class AccountSettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        // Account setting button
-        var buttonSettings = findViewById<Button>(R.id.settings_user_account_button)
-        buttonSettings.setOnClickListener{
+        // Rate button
+        var buttonRate = findViewById<Button>(R.id.rate_button)
+        buttonRate.setOnClickListener{
 
         }
 
-        // Vacation mode button
-        var buttonVacationMode = findViewById<Button>(R.id.vacation_mode_button)
-        buttonVacationMode.setOnClickListener{
+        // My bill button
+        var buttonMyBill = findViewById<Button>(R.id.my_bill_button)
+        buttonMyBill.setOnClickListener{
 
         }
 
-        // Watermarks button
-        var buttonWatermarks = findViewById<Button>(R.id.watermarks_button)
-        buttonWatermarks.setOnClickListener{
+        // Operations history button
+        var buttonOpHistory = findViewById<Button>(R.id.op_history_button)
+        buttonOpHistory.setOnClickListener{
 
         }
 
-        // Standard lot's description button
-        var buttonLotDecription = findViewById<Button>(R.id.standart_descript_button)
-        buttonLotDecription.setOnClickListener{
-
-        }
-
-        // Downloaded docs button
-        var buttonDownloadedDocs = findViewById<Button>(R.id.downloaded_docs_button)
-        buttonDownloadedDocs.setOnClickListener{
+        // Promotion services button
+        var buttonPromoService = findViewById<Button>(R.id.promotion_services_button)
+        buttonPromoService.setOnClickListener{
 
         }
 
@@ -58,18 +52,21 @@ class AccountSettingsActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.home -> {
                     loadFragment(HomeFragment())
-                    val intent = Intent(this@AccountSettingsActivity, MainActivity::class.java)
+                    val intent = Intent(this@MyFinancesActivity, MainActivity::class.java)
                     startActivity(intent)
                     true
                 }
+
                 R.id.more -> {
                     loadFragment(MoreFragment())
                     true
                 }
+
                 R.id.cart -> {
                     loadFragment(CartFragment())
                     true
                 }
+
                 R.id.account -> {
                     loadFragment(AccountFragment())
                     finish()
@@ -77,12 +74,15 @@ class AccountSettingsActivity : AppCompatActivity() {
                 }
 
 
-                else -> {true}
+                else -> {
+                    true
+                }
             }
         }
     }
 
-    private  fun loadFragment(fragment: Fragment){
+
+    private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         //transaction.replace(R.id.ll2,fragment)
         transaction.commit()

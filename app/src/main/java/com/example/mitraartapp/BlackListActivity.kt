@@ -8,11 +8,11 @@ import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class AccountSettingsActivity : AppCompatActivity() {
-    lateinit var bottomNav : BottomNavigationView
+class BlackListActivity : AppCompatActivity() {
+    lateinit var bottomNav:BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_account_settings)
+        setContentView(R.layout.activity_black_list)
 
         // Back button
         var backButton = findViewById<ImageButton>(R.id.back_button)
@@ -20,35 +20,24 @@ class AccountSettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        // Account setting button
-        var buttonSettings = findViewById<Button>(R.id.settings_user_account_button)
-        buttonSettings.setOnClickListener{
+        // BL of buyers button
+        var buttonOfBuyers = findViewById<Button>(R.id.of_buyers_button)
+        buttonOfBuyers.setOnClickListener{
 
         }
 
-        // Vacation mode button
-        var buttonVacationMode = findViewById<Button>(R.id.vacation_mode_button)
-        buttonVacationMode.setOnClickListener{
+        // BL of sellers button
+        var buttonOfSellers = findViewById<Button>(R.id.of_sellers_button)
+        buttonOfSellers.setOnClickListener{
 
         }
 
-        // Watermarks button
-        var buttonWatermarks = findViewById<Button>(R.id.watermarks_button)
-        buttonWatermarks.setOnClickListener{
+        // Rate limit button
+        var buttonRateLimit = findViewById<Button>(R.id.rate_limit_button)
+        buttonRateLimit.setOnClickListener{
 
         }
 
-        // Standard lot's description button
-        var buttonLotDecription = findViewById<Button>(R.id.standart_descript_button)
-        buttonLotDecription.setOnClickListener{
-
-        }
-
-        // Downloaded docs button
-        var buttonDownloadedDocs = findViewById<Button>(R.id.downloaded_docs_button)
-        buttonDownloadedDocs.setOnClickListener{
-
-        }
 
         // Bottom menu
         loadFragment(HomeFragment())
@@ -58,7 +47,7 @@ class AccountSettingsActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.home -> {
                     loadFragment(HomeFragment())
-                    val intent = Intent(this@AccountSettingsActivity, MainActivity::class.java)
+                    val intent = Intent(this@BlackListActivity, MainActivity::class.java)
                     startActivity(intent)
                     true
                 }
