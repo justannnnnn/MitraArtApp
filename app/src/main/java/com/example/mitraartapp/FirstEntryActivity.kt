@@ -126,8 +126,8 @@ class FirstEntryActivity : AppCompatActivity() {
          override protected fun doInBackground(vararg params : String) : String?{
 
             try {
-                val con = ConnectionHelper;
-                val connect = con.CONN();
+                //val con = ConnectionHelper;
+                val connect = ConnectionHelper.CONN();
 
                 val queryStmt = "SELECT Email FROM dbo.Account WHERE Email = " + "'" + e + "'"
                 //+ password
@@ -138,12 +138,15 @@ class FirstEntryActivity : AppCompatActivity() {
 
                 if (preparedStatement != null) {
                     resultQuery = preparedStatement.executeQuery()
-                };
+                }
                 if (preparedStatement != null) {
                     preparedStatement.close()
-                };
-                if (resultQuery != null){
-                    return "REGISTERED"
+                }
+                if (resultQuery != null) {
+                    if (resultQuery.cursorName != null){
+                        return "REGISTERED"
+                    }
+
                 }
                 return "NOT REGISTERED"
 

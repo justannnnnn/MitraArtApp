@@ -6,6 +6,7 @@ import android.os.StrictMode.ThreadPolicy
 import android.util.Log
 
 import java.sql.Connection
+import java.sql.Driver
 import java.sql.DriverManager
 import java.sql.SQLException
 
@@ -17,7 +18,7 @@ object ConnectionHelper {
         val _pass = "An4an2an5!!!"
         val _DB = "MithraArt"
         //val _server = "DESKTOP-4LKM9BH\\SQLEXPRESS01"
-        val _server = "127.0.0.1"
+        val _server = "192.168.1.24"
         val policy = ThreadPolicy.Builder()
             .permitAll().build()
         StrictMode.setThreadPolicy(policy)
@@ -29,6 +30,8 @@ object ConnectionHelper {
                     + "databaseName=" + _DB + ";user=" + _user + ";password="
                     + _pass + ";")
             conn = DriverManager.getConnection(ConnURL)
+            //conn = DriverManager.getConnection("jdbc:jtds:sqlserver://192.168.1.24", _user, _pass)
+            if (conn == null) throw SQLException()
         } catch (se: SQLException) {
             Log.e("ERRO", se.message!!)
         } catch (e: ClassNotFoundException) {
