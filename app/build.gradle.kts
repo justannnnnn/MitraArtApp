@@ -36,6 +36,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
 
 dependencies {
@@ -53,5 +54,10 @@ dependencies {
     implementation ("me.relex:circleindicator:2.1.6")
     implementation("org.imaginativeworld.whynotimagecarousel:whynotimagecarousel:2.1.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation ("io.ktor:ktor-client-android:1.4.0")
+    implementation ("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("androidx.credentials:credentials:1.2.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.2.0")
+
 }
 

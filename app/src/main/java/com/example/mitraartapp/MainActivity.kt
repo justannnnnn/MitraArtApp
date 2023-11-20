@@ -19,10 +19,12 @@ class MainActivity : AppCompatActivity() {
         get() = (applicationContext as App).lotService
     lateinit var lots: List<Lot>
     lateinit var bottomNav : BottomNavigationView
+    private var dbHandler: DBHandler? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_main)
+        dbHandler = DBHandler(this@MainActivity);
 
         // Carousel(each 3 sec changes)
         val carousel: ImageCarousel = findViewById(R.id.carousel)
@@ -62,6 +64,8 @@ class MainActivity : AppCompatActivity() {
         rvLots2.adapter = adapter2
         rvLots2.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
+
+
         // Bottom menu
         loadFragment(HomeFragment())
         bottomNav = findViewById(R.id.bottom_menu) as BottomNavigationView
@@ -82,7 +86,14 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.account -> {
                     loadFragment(AccountFragment())
-                    val intent = Intent(this@MainActivity, RegisteredAccountActivity::class.java)
+                    var intent = Intent()
+                    val isActivatedAcc = dbHandler!!.tableExists()
+                    if (isActivatedAcc) {
+                        intent = Intent(this@MainActivity, RegisteredAccountActivity::class.java)
+                    }
+                    else{
+                        intent = Intent(this@MainActivity, FirstEntryActivity::class.java)
+                    }
                     startActivity(intent)
                     true
                 }
@@ -97,5 +108,11 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         //transaction.replace(R.id.ll2,fragment)
         transaction.commit()
-}
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bottomNav = findViewById(R.id.bottom_menu) as BottomNavigationView
+        bottomNav.setSelectedItemId(R.id.home);
+    }
 }

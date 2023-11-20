@@ -16,7 +16,8 @@ object ConnectionHelper {
         val _user = "sa"
         val _pass = "An4an2an5!!!"
         val _DB = "MithraArt"
-        val _server = "DESKTOP-4LKM9BH\\SQLEXPRESS01"
+        //val _server = "DESKTOP-4LKM9BH\\SQLEXPRESS01"
+        val _server = "127.0.0.1"
         val policy = ThreadPolicy.Builder()
             .permitAll().build()
         StrictMode.setThreadPolicy(policy)
