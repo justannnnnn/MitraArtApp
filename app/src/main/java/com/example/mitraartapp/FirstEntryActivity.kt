@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -23,16 +24,7 @@ class FirstEntryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_entry)
 
-
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-        val mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        val account = GoogleSignIn.getLastSignedInAccount(this)
-        // если результат != null -> пользователь уже входил в приложение через google
-        // если null -> переводить на страницу с входом
-
-
+        // Close button
         var buttonClose = findViewById<ImageButton>(R.id.close_button)
         buttonClose.setOnClickListener{
             finish()
@@ -49,13 +41,18 @@ class FirstEntryActivity : AppCompatActivity() {
         var buttonVK = findViewById<Button>(R.id.enter_by_vk_button)
         buttonVK.setOnClickListener{
 
-            //val intent = Intent(this@FirstEntryActivity, VKAuthActivity::class.java)
-            //startActivity(intent)
         }
 
         // Entry by Google button
         var buttonGoogle = findViewById<Button>(R.id.enter_by_google_button)
         buttonGoogle.setOnClickListener{
+            // objects for Google ID API
+            // https://developers.google.com/identity/sign-in/android/sign-in#configure_google_sign-in_and_the_googlesigninclient_object
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+            val mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+            val account = GoogleSignIn.getLastSignedInAccount(this)
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, 1)
         }
@@ -70,11 +67,8 @@ class FirstEntryActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == 1) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
         }
@@ -83,94 +77,61 @@ class FirstEntryActivity : AppCompatActivity() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-
             // Signed in successfully, show authenticated UI.
-            //updateUI(account)
-            var email = account.email
-            val ch_us = checkUser(email, null)
-            ch_us.execute("")
-            val result = ch_us.res
+            val email = account.email
+            val checkUserObj = checkUser(email, null)
+            checkUserObj.execute("")
+            var result = checkUserObj.res
+            // user's info is in DB
             if (result.equals("REGISTERED")){
                 val intent = Intent(this@FirstEntryActivity, RegisteredAccountActivity::class.java)
                 startActivity(intent)
             }
+            // user's info isn't in DB
             else if (result.equals("NOT REGISTERED")) {
                 val intent = Intent(this@FirstEntryActivity, RegistrationActivity::class.java)
                 startActivity(intent)
             }
             else throw Exception()
-        } catch (e: ApiException) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            //Log.w(TAG, "signInResult:failed code=" + e.statusCode)
-            //updateUI(null)
+        } catch (e: Exception) {
+            Toast.makeText(this,"signInResult:failed code= " + e.message, Toast.LENGTH_SHORT).show();
         }
     }
 
-
+    // class for checking is user's info in DB
     class checkUser(email: String?, password: String?) : AsyncTask<String, Unit, String>() {
         val e = email
         val p = password
-        lateinit var res : String
+        var res = "nothing"
         @Deprecated("Deprecated in Java")
-        override protected fun onPreExecute() {
+        override fun onPreExecute() {
             super.onPreExecute();
-
-            /*email = edtEmailAddress.getText().toString();
-            password = edtPassword.getText().toString();
-            progressBar.setVisibility(View.VISIBLE);
-            btnSignUp.setVisibility(View.GONE);*/
-        }
-
-         @Deprecated("Deprecated in Java")
-         override protected fun doInBackground(vararg params : String) : String?{
-
             try {
-                //val con = ConnectionHelper;
                 val connect = ConnectionHelper.CONN();
-
-                val queryStmt = "SELECT Email FROM dbo.Account WHERE Email = " + "'" + e + "'"
-                //+ password
-                //+ "','User')";
-
+                var queryStmt = "SELECT Email FROM dbo.Account WHERE Email = " + "'" + e + "'"
+                //TODO: разобраться с хэшированием и с логикой входа с паролем
+                //if (p != null) queryStmt += "AND PasswordHash = '" + p + "'"
                 val preparedStatement = connect?.prepareStatement(queryStmt);
                 var resultQuery: ResultSet? = null
-
-                if (preparedStatement != null) {
-                    resultQuery = preparedStatement.executeQuery()
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close()
-                }
-                if (resultQuery != null) {
-                    if (resultQuery.cursorName != null){
-                        return "REGISTERED"
+                resultQuery = preparedStatement?.executeQuery()
+                // если в ResultSet есть строка - пользователь есть в БД
+                    if (resultQuery!!.next()){
+                        res = "REGISTERED"
                     }
-
-                }
-                return "NOT REGISTERED"
+                res = "NOT REGISTERED"
+                preparedStatement?.close()
 
             } catch (e : SQLException) {
-                e.printStackTrace();
-                return e.toString();
+                e.printStackTrace()
+                res = e.toString()
             } catch (e : Exception) {
-                return "Exception. Please check your code and database.";
+                res = "Exception. Please check your code and database."
             }
         }
-
-        @Deprecated("Deprecated in Java")
-        override protected fun onPostExecute(result : String) : Unit {
-
-            //Toast.makeText(signup.this, result, Toast.LENGTH_SHORT).show();
-            //howSnackBar(result);
-            //progressBar.setVisibility(View.GONE);
-            //btnSignUp.setVisibility(View.VISIBLE);S
-            if (!result.equals("Exception. Please check your code and database.")) {
-                res = result
-            }
-            else res = "ERROR"
-
-        }
+         @Deprecated("Deprecated in Java")
+         override protected fun doInBackground(vararg params : String) : String? {
+             return "nothing"
+         }
     }
 
 }
