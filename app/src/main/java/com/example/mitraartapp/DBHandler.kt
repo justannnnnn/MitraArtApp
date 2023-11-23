@@ -19,7 +19,23 @@ class DBHandler  // creating a constructor for our database handler.
         val query = ("CREATE TABLE " + TABLE_NAME + " ("
                 + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + LOGIN_COL + " TEXT,"
-                + PASSWORD_COL + " TEXT)")
+                + PASSWORD_COL + " TEXT,"
+                + FIRSTNAME_COL + " TEXT,"
+                + LASTNAME_COL + "TEXT)")
+
+        // at last we are calling a exec sql
+        // method to execute above sql query
+        db.execSQL(query)
+    }
+
+    fun createTable(){
+        val db = this.writableDatabase
+        val query = ("CREATE TABLE " + TABLE_NAME + " ("
+                + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + LOGIN_COL + " TEXT,"
+                + PASSWORD_COL + " TEXT,"
+                + FIRSTNAME_COL + " TEXT,"
+                + LASTNAME_COL + " TEXT)")
 
         // at last we are calling a exec sql
         // method to execute above sql query
@@ -29,8 +45,11 @@ class DBHandler  // creating a constructor for our database handler.
     // this method is use to add new course to our sqlite database.
     fun addNewAccount(
         accountLogin: String?,
-        accountPassword: String?
+        accountPassword: String?,
+        accountFirstName: String? = "",
+        accountLastName: String? = ""
     ) {
+
 
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
@@ -45,6 +64,8 @@ class DBHandler  // creating a constructor for our database handler.
         // along with its key and value pair.
         values.put(LOGIN_COL, accountLogin)
         values.put(PASSWORD_COL, accountPassword)
+        values.put(FIRSTNAME_COL, accountFirstName)
+        values.put(LASTNAME_COL, accountLastName)
 
         // after adding all values we are passing
         // content values to our table.
@@ -55,32 +76,42 @@ class DBHandler  // creating a constructor for our database handler.
         db.close()
     }
 
-    @SuppressLint("Range")
+    fun getSurname() : String{
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT " + LASTNAME_COL + " FROM " + TABLE_NAME, null)
+        cursor.moveToNext()
+        return cursor.getString(0)
+    }
+    fun getName() : String{
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT " + FIRSTNAME_COL + " FROM " + TABLE_NAME, null)
+        cursor.moveToNext()
+        return cursor.getString(0)
+    }
+    fun getEmail() : String{
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT " + LOGIN_COL + " FROM " + TABLE_NAME, null)
+        cursor.moveToNext()
+        return cursor.getString(0)
+    }
+
     fun tableExists(): Boolean {
         val db = this.readableDatabase
         var cnt = 0
-        val cursor = db.rawQuery("SELECT * FROM " + DBHandler.TABLE_NAME, null)
+        val cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
         while (cursor.moveToNext()){
             cnt += 1
         }
         return cnt > 0
+    }
 
-
-        /*if (db == null || !db.isOpen || TABLE_NAME == null) {
-            return false
-        }
-        var count = 0
-        val args = arrayOf("table", TABLE_NAME)
-        val cursor = db.rawQuery(
-            "SELECT COUNT(*) FROM sqlite_master WHERE type=? AND name=?",
-            args,
-            null
-        )
-        if (cursor.moveToFirst()) {
-            count = cursor.getInt(0)
-        }
-        cursor.close()
-        return count > 0*/
+    fun clearTable(){
+        val db = this.writableDatabase
+        db.execSQL("DELETE FROM " + TABLE_NAME)
+    }
+    fun deleteTable(){
+        val db = this.writableDatabase
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -108,6 +139,10 @@ class DBHandler  // creating a constructor for our database handler.
 
         // below variable is for password column.
         private const val PASSWORD_COL = "password"
+
+        private const val FIRSTNAME_COL = "firstname"
+
+        private const val LASTNAME_COL = "lastname"
 
     }
 }

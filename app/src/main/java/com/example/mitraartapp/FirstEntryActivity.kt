@@ -24,6 +24,7 @@ class FirstEntryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_entry)
 
+
         // Close button
         var buttonClose = findViewById<ImageButton>(R.id.close_button)
         buttonClose.setOnClickListener{
@@ -89,6 +90,10 @@ class FirstEntryActivity : AppCompatActivity() {
             }
             // user's info isn't in DB
             else if (result.equals("NOT REGISTERED")) {
+                val dbHandler = DBHandler(this@FirstEntryActivity)
+                // TODO: не факт, что хэш код подходит - тестовая версия
+                dbHandler!!.addNewAccount(email, account.hashCode().toString(), account.givenName, account.familyName)
+                val flag = dbHandler!!.tableExists()
                 val intent = Intent(this@FirstEntryActivity, RegistrationActivity::class.java)
                 startActivity(intent)
             }

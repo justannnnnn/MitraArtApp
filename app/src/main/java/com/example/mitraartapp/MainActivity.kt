@@ -25,6 +25,9 @@ class MainActivity : AppCompatActivity() {
         //binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_main)
         dbHandler = DBHandler(this@MainActivity);
+        //dbHandler!!.deleteTable()
+        //dbHandler!!.createTable()
+        //val flag = dbHandler!!.tableExists()
 
         // Carousel(each 3 sec changes)
         val carousel: ImageCarousel = findViewById(R.id.carousel)
@@ -87,6 +90,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.account -> {
                     loadFragment(AccountFragment())
                     var intent = Intent()
+                    // cleaning DB for testing registration screen
+                    dbHandler!!.clearTable()
                     val isActivatedAcc = dbHandler!!.tableExists()
                     if (isActivatedAcc) {
                         intent = Intent(this@MainActivity, RegisteredAccountActivity::class.java)
