@@ -41,10 +41,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/login_TextInput"
+        android:id="@+id/login_TextInputL"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="55dp"
         android:layout_marginTop="30dp"
         android:hint="@string/your_login"
         android:textColorHint="@color/medium_grey"
@@ -56,15 +57,16 @@
         app:layout_constraintTop_toBottomOf="@+id/entry_in_account_textView">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/login_TextInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/password_TextInput"
+        android:id="@+id/password_TextInputL"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="55dp"
         android:layout_marginTop="11dp"
         android:hint="@string/your_password"
         android:textColorHint="@color/medium_grey"
@@ -73,11 +75,13 @@
         app:hintTextAppearance="@style/text_style_input_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_TextInput">
+        app:layout_constraintTop_toBottomOf="@+id/login_TextInputL">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password_TextInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textPassword"
             android:layout_marginLeft="0dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,7 +93,7 @@
         android:background="@drawable/not_very_round_corners_purple"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_TextInput">
+        app:layout_constraintTop_toBottomOf="@+id/password_TextInputL">
 
         <Button
             android:id="@+id/enter_button"

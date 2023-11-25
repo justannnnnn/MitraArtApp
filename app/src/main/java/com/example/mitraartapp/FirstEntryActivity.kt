@@ -92,7 +92,8 @@ class FirstEntryActivity : AppCompatActivity() {
             else if (result.equals("NOT REGISTERED")) {
                 val dbHandler = DBHandler(this@FirstEntryActivity)
                 // TODO: не факт, что хэш код подходит - тестовая версия
-                dbHandler!!.addNewAccount(email, account.hashCode().toString(), account.givenName, account.familyName)
+                dbHandler.clearTable()
+                dbHandler!!.addNewAccount(email, "", account.givenName, account.familyName)
                 val flag = dbHandler!!.tableExists()
                 val intent = Intent(this@FirstEntryActivity, RegistrationActivity::class.java)
                 startActivity(intent)
@@ -103,7 +104,7 @@ class FirstEntryActivity : AppCompatActivity() {
         }
     }
 
-    // class for checking is user's info in DB
+    // class for checking is user's info in MS SQL base
     class checkUser(email: String?, password: String?) : AsyncTask<String, Unit, String>() {
         val e = email
         val p = password
@@ -120,10 +121,10 @@ class FirstEntryActivity : AppCompatActivity() {
                 var resultQuery: ResultSet? = null
                 resultQuery = preparedStatement?.executeQuery()
                 // если в ResultSet есть строка - пользователь есть в БД
-                    if (resultQuery!!.next()){
+                if (resultQuery!!.next()){
                         res = "REGISTERED"
-                    }
-                res = "NOT REGISTERED"
+                }
+                else res = "NOT REGISTERED"
                 preparedStatement?.close()
 
             } catch (e : SQLException) {

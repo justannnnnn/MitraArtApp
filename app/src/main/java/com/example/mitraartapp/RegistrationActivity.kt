@@ -151,7 +151,9 @@ class RegistrationActivity : AppCompatActivity() {
                 ).show()
                 checkBoxes.map{if (!it.isChecked) it.setError("Not marked")}
             }
-
+            // если валидация прошла успешно
+            dbHandler.setPassword(passwordTextField.text.toString())
+            dbHandler.matchValues(emailTextField.text.toString(), nameTextField.text.toString(), surnameTextField.text.toString())
 
 
         }

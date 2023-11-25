@@ -45,7 +45,7 @@ class DBHandler  // creating a constructor for our database handler.
     // this method is use to add new course to our sqlite database.
     fun addNewAccount(
         accountLogin: String?,
-        accountPassword: String?,
+        accountPassword: String? = "",
         accountFirstName: String? = "",
         accountLastName: String? = ""
     ) {
@@ -95,6 +95,11 @@ class DBHandler  // creating a constructor for our database handler.
         return cursor.getString(0)
     }
 
+    fun setPassword(password: String){
+        val db = this.writableDatabase
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + PASSWORD_COL + " = '" + password + "'")
+    }
+
     fun tableExists(): Boolean {
         val db = this.readableDatabase
         var cnt = 0
@@ -112,6 +117,13 @@ class DBHandler  // creating a constructor for our database handler.
     fun deleteTable(){
         val db = this.writableDatabase
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
+    }
+
+    fun matchValues(accountLogin: String?,
+                    accountFirstName: String? = "",
+                    accountLastName: String? = ""){
+        val db = this.writableDatabase
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + LOGIN_COL + " = '" + accountLogin + "', " + FIRSTNAME_COL + " = '" + accountFirstName + "', " + LASTNAME_COL + " = '" + accountLastName + "'")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
