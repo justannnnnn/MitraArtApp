@@ -59,6 +59,8 @@ dependencies {
     implementation("androidx.credentials:credentials:1.2.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.2.0")
     implementation ("com.google.android.gms:play-services-location:17.0.0")
-
+    implementation ("com.jakewharton:butterknife:10.0.0")
+    annotationProcessor ("com.jakewharton:butterknife-compiler:10.0.0")
+    implementation("com.vk:androidsdk:1.6.7")
 }
 

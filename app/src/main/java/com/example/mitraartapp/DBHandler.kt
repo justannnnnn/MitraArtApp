@@ -99,6 +99,10 @@ class DBHandler  // creating a constructor for our database handler.
         val db = this.writableDatabase
         db.execSQL("UPDATE " + TABLE_NAME + " SET " + PASSWORD_COL + " = '" + password + "'")
     }
+    fun setEmail(email: String){
+        val db = this.writableDatabase
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + LOGIN_COL + " = '" + email + "'")
+    }
 
     fun tableExists(): Boolean {
         val db = this.readableDatabase
