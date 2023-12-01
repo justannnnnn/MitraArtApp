@@ -1,8 +1,10 @@
 package com.example.mitraartapp
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.imaginativeworld.whynotimagecarousel.ImageCarousel
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
+import java.util.Base64
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var lots: List<Lot>
     lateinit var bottomNav : BottomNavigationView
     private var dbHandler: DBHandler? = null
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //binding = ActivityMainBinding.inflate(layoutInflater)
@@ -91,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                     loadFragment(AccountFragment())
                     var intent = Intent()
                     // cleaning DB for testing registration screen
-                    dbHandler!!.clearTable()
+                    //dbHandler!!.clearTable()
                     val isActivatedAcc = dbHandler!!.tableExists()
                     if (isActivatedAcc) {
                         intent = Intent(this@MainActivity, RegisteredAccountActivity::class.java)

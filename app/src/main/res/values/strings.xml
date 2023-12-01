@@ -72,7 +72,4 @@
     <string name="forget_login_or_password">Забыли логин или пароль?</string>
 
 
-    <integer name="com_vk_sdk_AppId">51794395</integer>
-
-
 </resources>

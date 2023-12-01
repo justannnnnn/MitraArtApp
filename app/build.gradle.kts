@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+
+
 android {
     namespace = "com.example.mitraartapp"
     compileSdk = 34
@@ -14,7 +16,14 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        /*testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        addManifestPlaceholders(mapOf(
+            "VKIDClientID" to "51794395", // ID вашего приложения (app_id).
+            "VKIDClientSecret" to "dJF1b8VKlFN1xmCJKx1m", // Ваш защищенный ключ (client_secret).
+            "VKIDRedirectHost" to "vk.com", // Обычно используется vk.com.
+            "VKIDRedirectScheme" to "vk51794395", // Обычно используется vk{ID приложения}.
+        ))*/
+
     }
 
     buildTypes {
@@ -59,8 +68,8 @@ dependencies {
     implementation("androidx.credentials:credentials:1.2.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.2.0")
     implementation ("com.google.android.gms:play-services-location:17.0.0")
-    implementation ("com.jakewharton:butterknife:10.0.0")
-    annotationProcessor ("com.jakewharton:butterknife-compiler:10.0.0")
-    implementation("com.vk:androidsdk:1.6.7")
-}
+    implementation ("com.github.therealbush:translator:1.0.2")
+ }
+
+
 

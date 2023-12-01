@@ -1,6 +1,7 @@
 package com.example.mitraartapp
 
 import android.app.AlertDialog
+import android.app.Application
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.AsyncTask
@@ -12,43 +13,41 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.vk.sdk.VKAccessToken
-import com.vk.sdk.VKCallback
-import com.vk.sdk.VKScope
-import com.vk.sdk.VKSdk
-import com.vk.sdk.api.VKApi
-import com.vk.sdk.api.VKApiConst
-import com.vk.sdk.api.VKError
-import com.vk.sdk.api.VKParameters
-import com.vk.sdk.api.VKRequest
-import com.vk.sdk.api.VKResponse
+/*import com.vk.api.sdk.VK
+import com.vk.auth.api.models.AuthResult
+import com.vk.auth.main.VkClientUiInfo
+import com.vk.superapp.SuperappKit
+import com.vk.superapp.SuperappKitConfig
+import com.vk.superapp.browser.internal.data.ShareType
+import com.vk.superapp.core.BuildConfig
+import com.vk.superapp.core.SuperappConfig*/
+//import com.vk.sdk.VKAccessToken
+//import com.vk.sdk.VKCallback
+//import com.vk.sdk.VKScope
+//import com.vk.sdk.VKSdk
+//import com.vk.sdk.api.VKApi
+//import com.vk.sdk.api.VKApiConst
+//import com.vk.sdk.api.VKError
+//import com.vk.sdk.api.VKParameters
+//import com.vk.sdk.api.VKRequest
+//import com.vk.sdk.api.VKResponse
 import java.sql.ResultSet
 import java.sql.SQLException
 
 
 class FirstEntryActivity : AppCompatActivity() {
 
-    private final var VK_APP_ID = 51794395
-    val VK_SCOPES = arrayOf<String>(
-        VKScope.FRIENDS,
-        VKScope.MESSAGES,
-        VKScope.NOTIFICATIONS,
-        VKScope.OFFLINE,
-        VKScope.STATUS,
-        VKScope.STATS,
-        VKScope.PHOTOS,
-        VKScope.EMAIL
-        )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_entry)
 
-        VKSdk.customInitialize(this@FirstEntryActivity,VK_APP_ID, "5.52")
+        /*VKSdk.customInitialize(this@FirstEntryActivity, VK_APP_ID, "5.89")*/
 
         // Close button
         var buttonClose = findViewById<ImageButton>(R.id.close_button)
@@ -66,18 +65,10 @@ class FirstEntryActivity : AppCompatActivity() {
 
 
         // Entry by VK button
-        var buttonVK = findViewById<Button>(R.id.enter_by_vk_button)
-        buttonVK.setOnClickListener{
-            VKSdk.login(this, VKScope.FRIENDS,
-                VKScope.MESSAGES,
-                VKScope.NOTIFICATIONS,
-                VKScope.OFFLINE,
-                VKScope.STATUS,
-                VKScope.STATS,
-                VKScope.PHOTOS,
-                VKScope.EMAIL)
+        /*var buttonVK = findViewById<Button>(R.id.enter_by_vk_button)
+        buttonVK.setOnClickListener {
 
-        }
+        }*/
 
         // Entry by Google button
         var buttonGoogle = findViewById<Button>(R.id.enter_by_google_button)
@@ -101,46 +92,13 @@ class FirstEntryActivity : AppCompatActivity() {
         }
     }
 
+    // FOR GOOGLE ID SIGN IN
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == 1) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
-        }
-        else{
-            VKSdk.onActivityResult(requestCode, resultCode, data, object: VKCallback<VKAccessToken>{
-                override fun onResult(res: VKAccessToken?) {
-                    val request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "id, first_name, last_name"))
-                    request.secure = false
-                    request.useSystemLanguage = false
-                    request.executeWithListener(mRequestListener)
-                }
-
-                override fun onError(error: VKError?) {
-                    TODO("Not yet implemented")
-                }
-            })
-        }
-    }
-
-    val mRequestListener = object: VKRequest.VKRequestListener(){
-        override fun onComplete(response: VKResponse?) {
-            super.onComplete(response)
-            // перехожу в нестандартный активити для проверки
-            val intent = Intent(this@FirstEntryActivity, AskQuestionActivity::class.java)
-            startActivity(intent)
-        }
-
-        override fun attemptFailed(request: VKRequest?, attemptNumber: Int, totalAttempts: Int) {
-            super.attemptFailed(request, attemptNumber, totalAttempts)
-            Toast.makeText(this@FirstEntryActivity, "Failed " + totalAttempts, Toast.LENGTH_SHORT).show()
-
-        }
-
-        override fun onError(error: VKError?) {
-            super.onError(error)
-            Toast.makeText(this@FirstEntryActivity, "Failed " + error.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -169,7 +127,7 @@ class FirstEntryActivity : AppCompatActivity() {
             }
             else throw Exception()
         } catch (e: Exception) {
-            Toast.makeText(this,"signInResult:failed code= " + e.message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"signInResult:failed code= " + e.message, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -213,6 +171,5 @@ class FirstEntryActivity : AppCompatActivity() {
              return "nothing"
          }
     }
-
 
 }

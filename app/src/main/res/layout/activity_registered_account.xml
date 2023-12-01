@@ -5,6 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisteredAccountActivity">
+    <androidx.core.widget.NestedScrollView
+        android:layout_marginBottom="65dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:fillViewport="true">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -71,7 +80,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="32dp"
         android:gravity="bottom"
-        android:text="Ростов-на-Дону"
+        android:text="Не определено"
         android:textAppearance="@style/text_style_h3_noclr"
         android:textColor="@color/dark_purple"
         app:layout_constraintStart_toEndOf="@+id/imageView"
@@ -80,7 +89,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:id="@+id/cl1"
-        android:layout_height="68dp"
+        android:layout_height="100dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="30dp"
@@ -94,8 +103,8 @@
             android:id="@+id/my_activity_button"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:gravity="bottom"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
             android:text="@string/my_activity"
             android:textColor="@color/dark_grey"
             android:textAppearance="@style/text_style_menu"
@@ -103,7 +112,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:icon="@drawable/menu_arrow"
-            app:iconSize="7dp"
+            app:iconSize="10dp"
             app:iconGravity="end"
 
             android:paddingRight="12dp"
@@ -121,8 +130,8 @@
             android:id="@+id/favourite_button"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:gravity="bottom"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
             android:text="@string/favourite"
             android:textColor="@color/dark_grey"
             android:textAppearance="@style/text_style_menu"
@@ -131,7 +140,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:icon="@drawable/menu_arrow"
             app:iconGravity="end"
-            app:iconSize="7dp"
+            app:iconSize="10dp"
             android:paddingRight="12dp"
             />
 
@@ -142,7 +151,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:id="@+id/cl2"
-        android:layout_height="102dp"
+        android:layout_height="150dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="15dp"
@@ -156,8 +165,8 @@
             android:id="@+id/my_finances_button"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:gravity="bottom"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
             android:text="@string/my_finances"
             android:textColor="@color/dark_grey"
             android:textAppearance="@style/text_style_menu"
@@ -165,7 +174,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:icon="@drawable/menu_arrow"
-            app:iconSize="7dp"
+            app:iconSize="10dp"
             app:iconGravity="end"
             android:paddingRight="12dp"
             />
@@ -182,16 +191,15 @@
             android:id="@+id/my_messages_button"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:layout_marginTop="34dp"
-            android:gravity="bottom"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
             android:text="@string/my_messages"
             android:textColor="@color/dark_grey"
             android:textAppearance="@style/text_style_menu"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/my_finances_button"
             app:icon="@drawable/menu_arrow"
             app:iconGravity="end"
-            app:iconSize="7dp"
+            app:iconSize="10dp"
             android:paddingRight="12dp"
             />
 
@@ -206,8 +214,8 @@
             android:id="@+id/delivery_button"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:gravity="bottom"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
             android:text="@string/delivery_address"
             android:textColor="@color/dark_grey"
             android:textAppearance="@style/text_style_menu"
@@ -216,7 +224,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:icon="@drawable/menu_arrow"
             app:iconGravity="end"
-            app:iconSize="7dp"
+            app:iconSize="10dp"
             android:paddingRight="12dp"
             />
 
@@ -226,7 +234,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="102dp"
+        android:layout_height="150dp"
         android:paddingLeft="25dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -240,8 +248,8 @@
             android:id="@+id/black_list_button"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:gravity="bottom"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
             android:text="@string/black_list"
             android:textColor="@color/dark_grey"
             android:textAppearance="@style/text_style_menu"
@@ -249,7 +257,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:icon="@drawable/menu_arrow"
-            app:iconSize="7dp"
+            app:iconSize="10dp"
             app:iconGravity="end"
             android:paddingRight="12dp"
             />
@@ -266,16 +274,16 @@
             android:id="@+id/ask_quest_button"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:layout_marginTop="34dp"
-            android:gravity="bottom"
+            android:layout_height="50dp"
+            android:layout_marginTop="50dp"
+            android:gravity="center_vertical"
             android:text="@string/ask_question"
             android:textColor="@color/dark_grey"
             android:textAppearance="@style/text_style_menu"
             app:layout_constraintTop_toTopOf="parent"
             app:icon="@drawable/menu_arrow"
             app:iconGravity="end"
-            app:iconSize="7dp"
+            app:iconSize="10dp"
             android:paddingRight="12dp"
             />
 
@@ -290,8 +298,8 @@
             android:id="@+id/faq_button"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:gravity="bottom"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
             android:text="@string/FAQ"
             android:textColor="@color/dark_grey"
             android:textAppearance="@style/text_style_menu"
@@ -300,13 +308,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:icon="@drawable/menu_arrow"
             app:iconGravity="end"
-            app:iconSize="7dp"
+            app:iconSize="10dp"
             android:paddingRight="12dp"
             />
 
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_menu"

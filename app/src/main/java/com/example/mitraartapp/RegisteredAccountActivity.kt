@@ -1,36 +1,34 @@
 package com.example.mitraartapp
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
+import android.location.LocationListener;
 import android.os.Bundle
-import android.provider.Settings
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import me.bush.translator.Language
+import me.bush.translator.Translator
 import java.util.Locale
 
 class RegisteredAccountActivity : AppCompatActivity() {
-    lateinit var bottomNav : BottomNavigationView
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
-    val PERMISSION_ID = 42
+    lateinit var bottomNav: BottomNavigationView
+    lateinit var locationManager: LocationManager
+    lateinit var locationTextView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registered_account)
-
+        locationManager = getSystemService(LOCATION_SERVICE) as LocationManager;
         // Account image view
+
 
         // Name text view
         var accountNameTextView = findViewById<TextView>(R.id.account_name)
@@ -39,66 +37,64 @@ class RegisteredAccountActivity : AppCompatActivity() {
 
         // Settings button
         var buttonSettings = findViewById<Button>(R.id.account_settings_button)
-        buttonSettings.setOnClickListener{
+        buttonSettings.setOnClickListener {
             val intent = Intent(this@RegisteredAccountActivity, AccountSettingsActivity::class.java)
             startActivity(intent)
         }
 
         // Location text view
-        var locationTextView = findViewById<TextView>(R.id.location_textView)
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this@RegisteredAccountActivity)
-        locationTextView.text = getLocation()
+        locationTextView = findViewById<TextView>(R.id.location_textView)
 
 
         //My Activity button
         var buttonMyActivity = findViewById<Button>(R.id.my_activity_button)
-        buttonMyActivity.setOnClickListener{
+        buttonMyActivity.setOnClickListener {
             val intent = Intent(this@RegisteredAccountActivity, MyActivityActivity::class.java)
             startActivity(intent)
         }
 
         // Favourite button
         var buttonFavourite = findViewById<Button>(R.id.favourite_button)
-        buttonFavourite.setOnClickListener{
+        buttonFavourite.setOnClickListener {
 
         }
 
         // My finances button
         var buttonMyFinances = findViewById<Button>(R.id.my_finances_button)
-        buttonMyFinances.setOnClickListener{
+        buttonMyFinances.setOnClickListener {
             val intent = Intent(this@RegisteredAccountActivity, MyFinancesActivity::class.java)
             startActivity(intent)
         }
 
         // My messages button
         var buttonMyMessages = findViewById<Button>(R.id.my_messages_button)
-        buttonMyMessages.setOnClickListener{
+        buttonMyMessages.setOnClickListener {
 
         }
 
         // Delivery button
         var buttonDelivery = findViewById<Button>(R.id.delivery_button)
-        buttonDelivery.setOnClickListener{
+        buttonDelivery.setOnClickListener {
 
         }
 
         // Black list button
         var buttonBlackList = findViewById<Button>(R.id.black_list_button)
-        buttonBlackList.setOnClickListener{
+        buttonBlackList.setOnClickListener {
             val intent = Intent(this@RegisteredAccountActivity, BlackListActivity::class.java)
             startActivity(intent)
         }
 
         // Ask question button
         var buttonAsk = findViewById<Button>(R.id.ask_quest_button)
-        buttonAsk.setOnClickListener{
+        buttonAsk.setOnClickListener {
             val intent = Intent(this@RegisteredAccountActivity, AskQuestionActivity::class.java)
             startActivity(intent)
         }
 
         // FAQ button
         var buttonFAQ = findViewById<Button>(R.id.faq_button)
-        buttonFAQ.setOnClickListener{
+        buttonFAQ.setOnClickListener {
 
         }
 
@@ -114,90 +110,135 @@ class RegisteredAccountActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+
                 R.id.more -> {
                     loadFragment(MoreFragment())
                     true
                 }
+
                 R.id.cart -> {
                     loadFragment(CartFragment())
                     true
                 }
+
                 R.id.account -> {
                     loadFragment(AccountFragment())
                     true
                 }
 
 
-                else -> {true}
+                else -> {
+                    true
+                }
             }
         }
     }
 
-    private  fun loadFragment(fragment: Fragment){
+    private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         //transaction.replace(R.id.ll2,fragment)
         transaction.commit()
     }
-
-    @SuppressLint("MissingPermission", "SetTextI18n")
-    private fun getLocation(): String? {
-        var res = "NOT DEFINED"
-        if (!checkPermissions()) {
-            requestPermissions()
+    override fun onResume() {
+        super.onResume()
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
         }
-        if (!isLocationEnabled()) {
-            Toast.makeText(this, "Please turn on location", Toast.LENGTH_LONG).show()
-            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-            startActivity(intent)
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, (10).toLong(), (10).toFloat(), locationListener)
+        //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000 * 10 as Long, 10.0, locationListener)
+        checkEnabled()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        locationManager.removeUpdates(locationListener)
+    }
+
+    private val locationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            showLocation(location)
         }
 
-        mFusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
-            val location: Location? = task.result
-            if (location != null) {
-                val geocoder = Geocoder(this, Locale.getDefault())
-                val list: MutableList<Address>? = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                res = list?.get(0)?.locality.toString()
-                        /*mainBinding.apply {
-                            tvLatitude.text = "Latitude\n${list[0].latitude}"
-                            tvLongitude.text = "Longitude\n${list[0].longitude}"
-                            tvCountryName.text = "Country Name\n${list[0].countryName}"
-                            tvLocality.text = "Locality\n${list[0].locality}"
-                            tvAddress.text = "Address\n${list[0].getAddressLine(0)}"*/
+        override fun onProviderDisabled(provider: String) {
+            checkEnabled()
+        }
+
+        override fun onProviderEnabled(provider : String) {
+            checkEnabled()
+            if (ActivityCompat.checkSelfPermission(
+                    this@RegisteredAccountActivity,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this@RegisteredAccountActivity,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
+            locationManager?.getLastKnownLocation(provider)?.let { showLocation(it) }
+        }
+
+        override fun onStatusChanged(provider : String, status : Int, extras : Bundle) {
+            if (provider.equals(LocationManager.GPS_PROVIDER)) {
+               // locationTextView.setText("Status: " + String.valueOf(status))
             }
         }
-        return res
     }
 
-
-    private fun isLocationEnabled(): Boolean {
-        var locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
-
-    private fun checkPermissions(): Boolean {
-        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            return true
-        }
-        return false
-    }
-    private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
-            PERMISSION_ID
-        )
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSION_ID) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                // Granted. Start getting the location information
-            }
+    private fun showLocation(location : Location) {
+        if (location == null)
+            return
+        if (location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
+            locationTextView.setText(formatLocation(location))
         }
     }
 
+    private fun formatLocation(location : Location) : String?{
+        if (location == null)
+            return ""
+        val translator = Translator()
+        return getCityName(location.latitude, location.longitude)?.let {
+            translator.translateBlocking(
+                it, Language.RUSSIAN, Language.ENGLISH).translatedText
+        }
+    }
+
+    private fun checkEnabled() {
+        //locationTextView.setText("Enabled: "
+         //       + locationManager
+        //.isProviderEnabled(LocationManager.GPS_PROVIDER))
+    }
+
+    //public fun onClickLocationSettings(view : View) {
+    //    startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+    //}
+
+    private fun getCityName(lat: Double,long: Double):String?{
+        val cityName: String?
+        val geoCoder = Geocoder(this@RegisteredAccountActivity, Locale.getDefault())
+        val Address = geoCoder.getFromLocation(lat,long,3)
+        cityName = Address?.get(0)?.adminArea
+        return cityName
+    }
 }

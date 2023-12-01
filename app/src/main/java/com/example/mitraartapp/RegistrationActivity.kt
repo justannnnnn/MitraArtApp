@@ -1,7 +1,11 @@
 package com.example.mitraartapp
 
+import android.content.Intent
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageButton
@@ -9,6 +13,8 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.sql.ResultSet
+import java.sql.SQLException
 
 class RegistrationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -152,11 +158,59 @@ class RegistrationActivity : AppCompatActivity() {
                 checkBoxes.map{if (!it.isChecked) it.setError("Not marked")}
             }
             // если валидация прошла успешно
-            dbHandler.setPassword(passwordTextField.text.toString())
-            dbHandler.matchValues(emailTextField.text.toString(), nameTextField.text.toString(), surnameTextField.text.toString())
-
-
+            dbHandler.clearTable()
+            dbHandler.addNewAccount(emailTextField.text.toString(), Base64.encodeToString(passwordTextField.text.toString().toByteArray(), 0), nameTextField.text.toString(), surnameTextField.text.toString())
+            //dbHandler.setPassword(passwordTextField.text.toString())
+            //dbHandler.matchValues(emailTextField.text.toString(), nameTextField.text.toString(), surnameTextField.text.toString())
+            val addUserObj = addUser(
+                surnameTextField.text.toString(), nameTextField.text.toString(),
+                patronymicTextField.text.toString(), emailTextField.text.toString(),
+                passwordTextField.text.toString(), phoneTextField.text.toString(),
+                isMan)
+            addUserObj.execute("")
+            val intent = Intent(this@RegistrationActivity, RegisteredAccountActivity::class.java)
+            startActivity(intent)
         }
 
+    }
+
+    class addUser(surname: String, name: String, patronymic: String, email: String?, password: String?, phone: String?, gender: Boolean) : AsyncTask<String, Unit, String>() {
+        val e = email
+        val pas = password
+        val n = name
+        val sn = surname
+        val pat = patronymic
+        val ph = phone
+        val g = if (gender) "1" else "0"
+        //var res = "nothing"
+        @Deprecated("Deprecated in Java")
+        override fun onPreExecute() {
+            super.onPreExecute();
+            try {
+                val connect = ConnectionHelper.CONN();
+                var queryStmt = "INSERT INTO dbo.Account (FirstName, MiddleName, LastName, " +
+                                "IsActive, IsLegal, StatusId, RegistrationDate, LastLoginDate,  " +
+                                "UserName, NormalizedUserName, Email, NormalizedEmail, " +
+                                "EmailConfirmed, PasswordHash, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnabled, AccessFailedCount, AllowNotifications, Gender, FullName) " +
+                                "VALUES ('" + n + "', '" + pat + "', '" + sn + "', 1, 0, 5, SYSDATETIME(), " +
+                                "SYSDATETIME(), '" + e + "', '" + e?.uppercase() + "', '" + e + "', '" +
+                                e?.uppercase() + "', 0, '" + Base64.encodeToString(pas?.toByteArray(), 0) +
+                                "', '" + ph + "', 0, 0, 0, 0, 1, " + g + ", '" + sn + n + pat + "')"
+                //TODO: разобраться с хэшированием и с логикой входа с паролем
+                //if (p != null) queryStmt += "AND PasswordHash = '" + p + "'"
+                val preparedStatement = connect?.prepareStatement(queryStmt);
+                preparedStatement?.executeUpdate()
+                preparedStatement?.close()
+
+            } catch (e : SQLException) {
+                e.printStackTrace()
+            } catch (e : Exception) {
+                //Log("Exception. Please check your code and database.")
+            }
+        }
+        @Deprecated("Deprecated in Java")
+        override protected fun doInBackground(vararg params : String) : String? {
+            return "nothing"
+        }
     }
 }
