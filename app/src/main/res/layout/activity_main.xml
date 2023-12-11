@@ -121,7 +121,10 @@
         android:background="@color/grey"
         app:menu="@menu/bottom_nav_menu"
         app:itemTextColor="@color/grey"
-        app:itemActiveIndicatorStyle="@color/grey"/>
+        app:labelVisibilityMode="unlabeled"
+        app:itemTextAppearanceActiveBoldEnabled="true"
+        app:itemTextAppearanceInactive="@color/medium_grey"
+        app:itemActiveIndicatorStyle="@color/black"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
