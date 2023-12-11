@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
@@ -46,8 +47,8 @@ class LoginEntryActivity : AppCompatActivity() {
                 Toast.makeText(this@LoginEntryActivity, "Not all fields are filled", Toast.LENGTH_SHORT).show()
             }
             val login = loginTextField.text.toString()
-            val password = passwordTextField.text.toString()
-            val checkUserObj = LoginEntryActivity.checkUser(login, null)
+            val password = Base64.encodeToString(passwordTextField.text.toString().toByteArray(), 0)
+            val checkUserObj = LoginEntryActivity.checkUser(login, password)
             checkUserObj.execute("")
             var result = checkUserObj.res
             if (result.equals("REGISTERED")){
@@ -60,7 +61,7 @@ class LoginEntryActivity : AppCompatActivity() {
                 val dbHandler = DBHandler(this@LoginEntryActivity)
                 // TODO: не факт, что хэш код подходит - тестовая версия
                 dbHandler.clearTable()
-                dbHandler!!.addNewAccount(login, "", first_name, last_name)
+                dbHandler!!.addNewAccount(login, password, first_name, last_name)
                 val intent = Intent(this@LoginEntryActivity, RegisteredAccountActivity::class.java)
                 startActivity(intent)
             }
@@ -84,7 +85,7 @@ class LoginEntryActivity : AppCompatActivity() {
             super.onPreExecute();
             try {
                 val connect = ConnectionHelper.CONN();
-                var queryStmt = "SELECT Email FROM dbo.Account WHERE Email = " + "'" + e + "'"
+                var queryStmt = "SELECT Email FROM dbo.Account WHERE Email = " + "'" + e + "' and PasswordHash = '" + p + "'"
                 //TODO: разобраться с хэшированием и с логикой входа с паролем
                 //if (p != null) queryStmt += "AND PasswordHash = '" + p + "'"
                 val preparedStatement = connect?.prepareStatement(queryStmt);

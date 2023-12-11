@@ -69,7 +69,8 @@ class RegisteredAccountActivity : AppCompatActivity() {
         // My messages button
         var buttonMyMessages = findViewById<Button>(R.id.my_messages_button)
         buttonMyMessages.setOnClickListener {
-
+            val intent = Intent(this@RegisteredAccountActivity, MyMessagesActivity::class.java)
+            startActivity(intent)
         }
 
         // Delivery button
