@@ -60,7 +60,8 @@ class LoginEntryActivity : AppCompatActivity() {
                 val last_name = getUserLast.res
                 val dbHandler = DBHandler(this@LoginEntryActivity)
                 // TODO: не факт, что хэш код подходит - тестовая версия
-                dbHandler.clearTable()
+                dbHandler.deleteTable()
+                dbHandler.createTable()
                 dbHandler!!.addNewAccount(login, password, first_name, last_name)
                 val intent = Intent(this@LoginEntryActivity, RegisteredAccountActivity::class.java)
                 startActivity(intent)

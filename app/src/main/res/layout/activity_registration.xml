@@ -61,6 +61,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/surname_TextInput"
+                android:textAppearance="@style/text_style_h3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -84,6 +85,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name_TextInput"
+                    android:textAppearance="@style/text_style_h3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
@@ -115,6 +117,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/patronymic_TextInput"
+                    android:textAppearance="@style/text_style_h3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
@@ -177,6 +180,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email_TextInput"
+            android:textAppearance="@style/text_style_h3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
@@ -199,6 +203,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/phone_TextInput"
+            android:textAppearance="@style/text_style_h3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"
@@ -221,6 +226,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/create_password_TextInput"
+            android:textAppearance="@style/text_style_h3"
             android:layout_width="match_parent"
             android:inputType="textPassword"
             android:layout_height="wrap_content"
@@ -243,6 +249,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/repeat_password_TextInput"
+            android:textAppearance="@style/text_style_h3"
             android:layout_width="match_parent"
             android:inputType="textPassword"
             android:layout_height="wrap_content"
@@ -253,10 +260,12 @@
         android:id="@+id/i_am_18_checkBox"
         android:layout_marginTop="30dp"
         android:layout_width="220dp"
-        android:gravity="top"
-        android:layout_height="20dp"
+        android:gravity="center_vertical"
+        android:layout_height="30dp"
         android:button="@drawable/checkbox_selector"
+        android:paddingLeft="5dp"
         android:text="@string/i_am_18"
+        android:textAppearance="@style/text_style_h3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/repeat_password_TextInputL" />
 
@@ -265,9 +274,10 @@
         android:layout_marginTop="10dp"
         android:layout_width="320dp"
         android:layout_height="40dp"
-        android:paddingTop="0dp"
-        android:gravity="top"
+        android:paddingLeft="5dp"
+        android:gravity="center_vertical"
         android:button="@drawable/checkbox_selector"
+        android:textAppearance="@style/text_style_h3"
         android:text="@string/want_receive_notif"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/i_am_18_checkBox" />
@@ -275,10 +285,11 @@
     <CheckBox
         android:id="@+id/informed_agreed_checkBox"
         android:layout_marginTop="10dp"
-        android:layout_width="320dp"
+        android:layout_width="340dp"
         android:layout_height="70dp"
         android:paddingTop="0dp"
-        android:gravity="top"
+        android:paddingLeft="5dp"
+        android:gravity="center_vertical"
         android:button="@drawable/checkbox_selector"
         android:text="@string/informed_agreed"
         app:layout_constraintStart_toStartOf="parent"

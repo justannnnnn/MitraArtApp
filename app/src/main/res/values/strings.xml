@@ -64,12 +64,51 @@
     <string name="describe_your_problem">Опишите Вашу проблему</string>
     <string name="send_request">Отправить заявку</string>
     <string name="agreement_data">Нажимая «Отправить заявку», вы даёте согласие на обработку ваших персональных данных</string>
-
     <string name="entry_in_account">Вход в аккаунт</string>
     <string name="your_login">Введите Ваш логин</string>
     <string name="your_password">Введите Ваш пароль</string>
     <string name="enter">Войти</string>
     <string name="forget_login_or_password">Забыли логин или пароль?</string>
 
+    <string name="login">Логин</string>
+    <string name="e_mail">E-mail</string>
+    <string name="my_id">Мой ID: </string>
+    <string name="password">Пароль</string>
+    <string name="type">Тип</string>
+    <string name="my_ecp">Мой ЭЦП</string>
+    <string-array name="type">
+        <item>Физическое лицо</item>
+        <item>Юридическое лицо</item>
+        <item>ИП</item>
+        <item></item>
+    </string-array>
+    <string-array name="ecp">
+        <item>Выберите ЭЦП</item>
+        <item></item>
+    </string-array>
+    <string name="phys_type">Физическое лицо</string>
+    <string name="ur_type">Юридическое лицо</string>
+    <string name="ip">ИП</string>
+    <string name="your_surname">Фамилия</string>
+    <string name="your_name">Имя</string>
+    <string name="your_patronymic">Отчество</string>
+    <string name="birthday">Дата рождения</string>
+    <string name="passport">Серия и номер паспорта</string>
+    <string name="passport_date">Дата выдачи</string>
+    <string name="by_whom_given">Кем выдан документ</string>
+    <string name="residence_passport">Место жительства по прописке</string>
+    <string name="factical_residence">Фактическое место жительства</string>
+    <string name="save">Сохранить</string>
+    <string name="org_name">Наименование юр. лица</string>
+    <string name="INN">ИНН</string>
+    <string name="OGRN">ОГРН</string>
+    <string name="acts_by">Действует на основании(для представителей юр. лица)</string>
+    <string name="address_registration">Адрес регистрации юр. лица</string>
+    <string name="name_ip">Наименование ИП</string>
+    <string name="ogrn_ip">ОГРН ИП</string>
+
+    <string name="make_photo">Сделать фото</string>
+    <string name="add_from_gallery">Добавить фото из галереи</string>
+    <string name="delete_photo">Удалить фото</string>
 
 </resources>

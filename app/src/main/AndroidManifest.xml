@@ -19,6 +19,18 @@
         android:theme="@style/Theme.MitraArtApp"
         tools:targetApi="31">
         <activity
+            android:name=".IPTypeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LegalTypeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PhysicalTypeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserSettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".MyMessagesActivity"
             android:exported="false" />
         <activity

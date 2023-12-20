@@ -23,7 +23,8 @@ class AccountSettingsActivity : AppCompatActivity() {
         // Account setting button
         var buttonSettings = findViewById<Button>(R.id.settings_user_account_button)
         buttonSettings.setOnClickListener{
-
+            val intent = Intent(this@AccountSettingsActivity, UserSettingsActivity::class.java)
+            startActivity(intent)
         }
 
         // Vacation mode button

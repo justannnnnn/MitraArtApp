@@ -58,6 +58,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/login_TextInput"
+            android:textAppearance="@style/text_style_h3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp" />
@@ -79,6 +80,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password_TextInput"
+            android:textAppearance="@style/text_style_h3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
