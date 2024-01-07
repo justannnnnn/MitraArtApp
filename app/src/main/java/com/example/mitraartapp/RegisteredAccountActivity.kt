@@ -3,18 +3,23 @@ package com.example.mitraartapp
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.location.LocationListener;
 import android.os.Bundle
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.shape.CornerFamily
 import me.bush.translator.Language
 import me.bush.translator.Translator
 import java.util.Locale
@@ -23,16 +28,34 @@ class RegisteredAccountActivity : AppCompatActivity() {
     lateinit var bottomNav: BottomNavigationView
     lateinit var locationManager: LocationManager
     lateinit var locationTextView: TextView
+    lateinit var imageView: ShapeableImageView
+    var hasPhoto = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registered_account)
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager;
+        var dbHandler = DBHandler(this@RegisteredAccountActivity)
+
+
         // Account image view
+        imageView = findViewById<ShapeableImageView>(R.id.account_image)
+        imageView.setShapeAppearanceModel(imageView.getShapeAppearanceModel().toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED,120f)
+            .setTopRightCorner(CornerFamily.ROUNDED,120f)
+            .setBottomLeftCorner(CornerFamily.ROUNDED,120f)
+            .setBottomRightCorner(CornerFamily.ROUNDED,120f)
+            .build())
+        val photoBlob = dbHandler.getImage()
+        if (photoBlob.size != 0){
+            hasPhoto = true
+            val photo = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size)
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(photo, 150, 150, false))
+        }
 
 
         // Name text view
         var accountNameTextView = findViewById<TextView>(R.id.account_name)
-        var dbHandler = DBHandler(this@RegisteredAccountActivity)
         accountNameTextView.text = dbHandler.getName() + " " + dbHandler.getSurname()
 
         // Settings button
@@ -162,6 +185,13 @@ class RegisteredAccountActivity : AppCompatActivity() {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, (10).toLong(), (10).toFloat(), locationListener)
         //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000 * 10 as Long, 10.0, locationListener)
         checkEnabled()
+        var dbHandler = DBHandler(this@RegisteredAccountActivity)
+        val photoBlob = dbHandler.getImage()
+        if (photoBlob.size != 0){
+            hasPhoto = true
+            val photo = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size)
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(photo, 150, 150, false))
+        }
     }
 
     override fun onPause() {

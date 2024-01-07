@@ -6,18 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".UserSettingsActivity">
 
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="65dp"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-85dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+            android:layout_marginRight="20dp"
+            android:paddingBottom="20dp">
 
             <ImageButton
                 android:id="@+id/back_button"
@@ -33,8 +35,8 @@
                 android:id="@+id/user_settings_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="56dp"
                 android:layout_marginLeft="11dp"
+                android:layout_marginTop="56dp"
                 android:gravity="top"
                 android:text="@string/settings_user_account"
                 android:textAppearance="@style/text_style_h2"
@@ -42,31 +44,43 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
                 android:id="@+id/cl1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/user_settings_textView"
                 tools:layout_editor_absoluteX="20dp">
 
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/photoImageView"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/very_very_round_corners"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
                     android:id="@+id/ll1"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/very_very_round_corners"
                     android:gravity="center"
-                    android:layout_marginTop="20dp">
-                <ImageButton
-                    android:id="@+id/photoImageButton"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:background="@drawable/photo"
-                     />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/photoImageButton"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:background="@drawable/photo" />
                 </LinearLayout>
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <TextView
                 android:id="@+id/loginTextView"
@@ -82,14 +96,14 @@
                 android:id="@+id/loginTextViewClickable"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginTextView"
-                android:text="govnogovna"
-                android:gravity="center_vertical"
-                android:textAppearance="@style/text_style_menu"
-                android:paddingLeft="25dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/not_very_round_corners_grey"/>
+                android:background="@drawable/not_very_round_corners_grey"
+                android:gravity="center_vertical"
+                android:paddingLeft="25dp"
+                android:text="govnogovna"
+                android:textAppearance="@style/text_style_menu"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginTextView" />
 
             <TextView
                 android:id="@+id/emailTextView"
@@ -100,18 +114,19 @@
                 android:textAppearance="@style/text_style_input_hint"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/loginTextViewClickable" />
+
             <TextView
                 android:id="@+id/emailTextViewClickable"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/emailTextView"
                 android:layout_marginTop="10dp"
-                android:text="govnogovna"
-                android:textAppearance="@style/text_style_menu"
+                android:background="@drawable/not_very_round_corners_grey"
                 android:gravity="center_vertical"
                 android:paddingLeft="25dp"
-                android:background="@drawable/not_very_round_corners_grey"/>
+                android:text="govnogovna"
+                android:textAppearance="@style/text_style_menu"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailTextView" />
 
             <TextView
                 android:id="@+id/id1TextView"
@@ -122,12 +137,13 @@
                 android:textAppearance="@style/text_style_input_hint"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/emailTextViewClickable" />
+
             <TextView
                 android:id="@+id/id2TextView"
                 android:layout_width="50dp"
                 android:layout_height="18dp"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="3dp"
+                android:layout_marginTop="20dp"
                 android:text="1538"
                 android:textAppearance="@style/text_style_menu"
                 app:layout_constraintLeft_toRightOf="@id/id1TextView"
@@ -142,19 +158,20 @@
                 android:textAppearance="@style/text_style_input_hint"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/id1TextView" />
+
             <TextView
                 android:id="@+id/passTextViewClickable"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/passTextView"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/not_very_round_corners_grey"
+                android:gravity="center_vertical"
+                android:inputType="textPassword"
+                android:paddingLeft="25dp"
                 android:text="govnogovna"
                 android:textAppearance="@style/text_style_menu"
-                android:gravity="center_vertical"
-                android:paddingLeft="25dp"
-                android:inputType="textPassword"
-                android:background="@drawable/not_very_round_corners_grey"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/passTextView" />
 
             <TextView
                 android:id="@+id/typeTextView"
@@ -170,11 +187,10 @@
                 android:id="@+id/typeSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/typeTextView"
-                android:background="@drawable/background_spinner"
                 android:layout_marginTop="10dp"
-                />
+                android:background="@drawable/background_spinner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/typeTextView" />
 
             <TextView
                 android:id="@+id/ecpTextView"
@@ -190,21 +206,14 @@
                 android:id="@+id/ecpSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ecpTextView"
-                android:background="@drawable/background_spinner"
                 android:layout_marginTop="10dp"
-                />
-
-
+                android:background="@drawable/background_spinner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ecpTextView" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
-
-
-
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_menu"

@@ -29,8 +29,8 @@ class MainActivity : AppCompatActivity() {
         //binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_main)
         dbHandler = DBHandler(this@MainActivity);
-        //dbHandler!!.deleteTable()
-        //dbHandler!!.createTable()
+        dbHandler!!.deleteTable()
+        dbHandler!!.createTable()
         //val flag = dbHandler!!.tableExists()
 
         // Carousel(each 3 sec changes)

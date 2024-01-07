@@ -69,6 +69,7 @@ dependencies {
     implementation("androidx.credentials:credentials-play-services-auth:1.2.0")
     implementation ("com.google.android.gms:play-services-location:17.0.0")
     implementation ("com.github.therealbush:translator:1.0.2")
+    implementation("com.squareup.picasso:picasso:2.5.2")
  }
 
 
