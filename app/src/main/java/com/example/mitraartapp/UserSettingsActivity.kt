@@ -1,11 +1,18 @@
 package com.example.mitraartapp
 
-import android.R.attr.bitmap
+import android.app.Activity
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -13,13 +20,23 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Spinner
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
-import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
+import java.nio.ByteBuffer
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.*
 
 
 class UserSettingsActivity : AppCompatActivity() {
@@ -28,12 +45,18 @@ class UserSettingsActivity : AppCompatActivity() {
     var hasPhoto = false
 
 
+    private var photoFile: File? = null
+    private val CAPTURE_IMAGE_REQUEST = 12
+    private lateinit var mCurrentPhotoPath: String
+    private val IMAGE_DIRECTORY_NAME = "MITRA"
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_settings)
         var dbHandler = DBHandler(this@UserSettingsActivity)
-        hasPhoto = dbHandler.getImage().size != 0
+        hasPhoto = dbHandler.getImage() != ""
 
         // Back button
         val backButton = findViewById<ImageButton>(R.id.back_button)
@@ -52,9 +75,38 @@ class UserSettingsActivity : AppCompatActivity() {
         val photoLayout = findViewById<LinearLayout>(R.id.ll1)
         if (hasPhoto) {
             photoLayout.visibility = View.INVISIBLE
-            val photoBlob = dbHandler.getImage()
-            val photo = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size)
-            photoImageView.setImageBitmap(Bitmap.createScaledBitmap(photo, 150, 150, false))
+            var dbHandler = DBHandler(this@UserSettingsActivity)
+            val photoFileString = dbHandler.getImage()
+            val myBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.fromFile(File(photoFileString)))
+            photoImageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
+
+        }
+        photoImageView.setOnClickListener{
+            val dialog = BottomSheetDialog(this)
+            val view = layoutInflater.inflate(R.layout.button_sheet_dialog, null)
+
+            val makePhotoButton = view.findViewById<Button>(R.id.make_photo_button)
+            val addPhotoButton = view.findViewById<Button>(R.id.add_photo_button)
+            val deletePhotoButton = view.findViewById<Button>(R.id.delete_photo_button)
+            if (!hasPhoto) deletePhotoButton.visibility = View.INVISIBLE
+
+            makePhotoButton.setOnClickListener{
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    captureImage()
+                } else {
+                    captureImage2()
+                }
+            }
+            addPhotoButton.setOnClickListener{
+                val pickImg = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                changeImage.launch(pickImg)
+            }
+            deletePhotoButton.setOnClickListener{
+
+            }
+            dialog.setCancelable(true) // avoid closing of dialog box when clicking on the screen
+            dialog.setContentView(view) // setting content view to our view
+            dialog.show()
         }
 
         // Photo button
@@ -66,28 +118,24 @@ class UserSettingsActivity : AppCompatActivity() {
             val makePhotoButton = view.findViewById<Button>(R.id.make_photo_button)
             val addPhotoButton = view.findViewById<Button>(R.id.add_photo_button)
             val deletePhotoButton = view.findViewById<Button>(R.id.delete_photo_button)
-            deletePhotoButton.visibility = View.INVISIBLE
+            if (!hasPhoto) deletePhotoButton.visibility = View.INVISIBLE
 
             makePhotoButton.setOnClickListener{
-                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(cameraIntent, pic_id)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    captureImage()
+                } else {
+                    captureImage2()
+                }
             }
             addPhotoButton.setOnClickListener{
-
+                val pickImg = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                changeImage.launch(pickImg)
             }
             deletePhotoButton.setOnClickListener{
 
             }
-            // below line is use to set cancelable to avoid
-            // closing of dialog box when clicking on the screen.
-            dialog.setCancelable(true)
-
-            // on below line we are setting
-            // content view to our view.
-            dialog.setContentView(view)
-
-            // on below line we are calling
-            // a show method to display a dialog.
+            dialog.setCancelable(true) // avoid closing of dialog box when clicking on the screen
+            dialog.setContentView(view) // setting content view to our view
             dialog.show()
         }
 
@@ -95,11 +143,13 @@ class UserSettingsActivity : AppCompatActivity() {
         // Spinners
         val mSpinnerType = findViewById<Spinner>(R.id.typeSpinner)
         val mSpinnerECP = findViewById<Spinner>(R.id.ecpSpinner)
+
         // Create an adapter as shown below
         val mArrayAdapterType = ArrayAdapter.createFromResource(this, R.array.type, R.layout.spinner_list)
         val mArrayAdapterECP = ArrayAdapter.createFromResource(this, R.array.ecp, R.layout.spinner_list)
         mArrayAdapterType.setDropDownViewResource(R.layout.spinner_list)
         mArrayAdapterECP.setDropDownViewResource(R.layout.spinner_list)
+
         // Set the adapter to the Spinner
         mSpinnerType.adapter = mArrayAdapterType
         mSpinnerECP.adapter = mArrayAdapterECP
@@ -172,22 +222,17 @@ class UserSettingsActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // Match the request 'pic id with requestCode
-        if (requestCode == pic_id) {
-            // BitMap is data structure of image file which store the image in memory
-            val photo = data!!.extras!!["data"] as Bitmap
-            photo
-            // Set the image in imageview for display
-            photoImageView.setImageBitmap(Bitmap.createScaledBitmap(photo, 150, 150, false))
-            //photoImageView.setImageBitmap(photo)
-            hasPhoto = true
-            val stream = ByteArrayOutputStream()
-            photo.compress(Bitmap.CompressFormat.PNG, 0, stream)
+
+        if (resultCode == Activity.RESULT_OK) {
+            val myBitmap = BitmapFactory.decodeFile(photoFile!!.getAbsolutePath())
+            photoImageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
             var dbHandler = DBHandler(this@UserSettingsActivity)
-            dbHandler.setImage(stream.toByteArray())
+            dbHandler.setImage(photoFile!!.absolutePath)
+            hasPhoto = true
+        } else {
+            displayMessage(baseContext, "Request cancelled or something went wrong.")
         }
     }
-
 
 
     override fun onResume() {
@@ -196,15 +241,148 @@ class UserSettingsActivity : AppCompatActivity() {
         if (hasPhoto) {
             photoLayout.visibility = View.INVISIBLE
             var dbHandler = DBHandler(this@UserSettingsActivity)
-            val photoBlob = dbHandler.getImage()//Convert blob to bytearray
-            val options = BitmapFactory.Options()
-            val bitmap = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size - 1, options)
-            val photo = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size - 1)
-            photoImageView.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 150, 150, false))
+            val photoFileString = dbHandler.getImage()//Convert blob to bytearray
+
+            val myBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.fromFile(File(photoFileString)))
+            //myBitmap.height
+            photoImageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
+
         }
     }
+
 
     companion object {
         private const val pic_id = 123
     }
+
+    private fun captureImage2() {
+
+        try {
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            photoFile = createImageFile4()
+            if (photoFile != null) {
+                displayMessage(baseContext, photoFile!!.getAbsolutePath())
+                Log.i("Mayank", photoFile!!.getAbsolutePath())
+                val photoURI = Uri.fromFile(photoFile)
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(cameraIntent, CAPTURE_IMAGE_REQUEST)
+            }
+        } catch (e: Exception) {
+            displayMessage(baseContext, "Camera is not available." + e.toString())
+        }
+
+    }
+
+    private fun captureImage() {
+
+        if (ContextCompat.checkSelfPermission(this@UserSettingsActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this@UserSettingsActivity, arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+        } else {
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            //if (takePictureIntent.resolveActivity(packageManager) != null) {
+            if (getApplicationContext().getPackageManager().hasSystemFeature(
+                    PackageManager.FEATURE_CAMERA)){
+                // Create the File where the photo should go
+                try {
+
+                    photoFile = createImageFile()
+                    displayMessage(baseContext, photoFile!!.getAbsolutePath())
+                    Log.i("Mayank", photoFile!!.getAbsolutePath())
+
+                    // Continue only if the File was successfully created
+                    if (photoFile != null) {
+
+
+                        var photoURI = FileProvider.getUriForFile(this,
+                            "com.example.mitraartapp.fileprovider",
+                            photoFile!!
+                        )
+
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+
+                        startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST)
+
+                    }
+                } catch (ex: Exception) {
+                    // Error occurred while creating the File
+                    displayMessage(baseContext,"Capture Image Bug: "  + ex.message.toString())
+                }
+
+
+            } else {
+                displayMessage(baseContext, "Nullll")
+            }
+        }
+    }
+
+    private fun createImageFile4(): File? {
+        // External sdcard location
+        val mediaStorageDir = File(
+            Environment
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            IMAGE_DIRECTORY_NAME)
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                displayMessage(baseContext, "Unable to create directory.")
+                return null
+            }
+        }
+
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss",
+            Locale.getDefault()).format(Date())
+
+        return File(mediaStorageDir.path + File.separator
+                + "IMG_" + timeStamp + ".jpg")
+
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "JPEG_" + timeStamp + "_"
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
+            imageFileName, /* prefix */
+            ".jpg", /* suffix */
+            storageDir      /* directory */
+        )
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.absolutePath
+        return image
+    }
+
+    private fun displayMessage(context: Context, message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 0) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                captureImage()
+            }
+        }
+
+    }
+
+    private val changeImage =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val data = it.data
+                val imgUri = data?.data
+                var dbHandler = DBHandler(this@UserSettingsActivity)
+                dbHandler.setImage(imgUri.toString())
+                val myBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imgUri)
+                photoImageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
+
+
+                //photoImageView.setImageURI(imgUri)
+            }
+        }
 }

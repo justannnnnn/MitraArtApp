@@ -22,7 +22,7 @@ class DBHandler  // creating a constructor for our database handler.
                 + PASSWORD_COL + " TEXT,"
                 + FIRSTNAME_COL + " TEXT,"
                 + LASTNAME_COL + "TEXT, "
-                + IMAGE + " BLOB NOT NULL)")
+                + IMAGE + " TEXT)")
 
 
         // at last we are calling a exec sql
@@ -38,7 +38,7 @@ class DBHandler  // creating a constructor for our database handler.
                 + PASSWORD_COL + " TEXT,"
                 + FIRSTNAME_COL + " TEXT,"
                 + LASTNAME_COL + " TEXT, "
-                + IMAGE + " BLOB NOT NULL)")
+                + IMAGE + " TEXT)")
 
         // at last we are calling a exec sql
         // method to execute above sql query
@@ -51,7 +51,7 @@ class DBHandler  // creating a constructor for our database handler.
         accountPassword: String? = "",
         accountFirstName: String? = "",
         accountLastName: String? = "",
-        image: ByteArray? = ByteArray(0)
+        image: String? = ""
     ) {
 
 
@@ -100,11 +100,11 @@ class DBHandler  // creating a constructor for our database handler.
         return cursor.getString(0)
     }
 
-    fun getImage() : ByteArray{
+    fun getImage() : String{
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT " + IMAGE + " FROM " + TABLE_NAME, null)
         cursor.moveToNext()
-        return cursor.getBlob(0)
+        return cursor.getString(0)
     }
 
 
@@ -117,9 +117,9 @@ class DBHandler  // creating a constructor for our database handler.
         db.execSQL("UPDATE " + TABLE_NAME + " SET " + LOGIN_COL + " = '" + email + "'")
     }
 
-    fun setImage(imageBytes : ByteArray){
+    fun setImage(image : String){
         val db = this.writableDatabase
-        db.execSQL("UPDATE " + TABLE_NAME + " SET " + IMAGE + " = '" + imageBytes + "'")
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + IMAGE + " = '" + image + "'")
     }
 
     fun tableExists(): Boolean {

@@ -9,7 +9,10 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.location.LocationListener;
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -22,6 +25,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
 import me.bush.translator.Language
 import me.bush.translator.Translator
+import java.io.File
 import java.util.Locale
 
 class RegisteredAccountActivity : AppCompatActivity() {
@@ -36,6 +40,7 @@ class RegisteredAccountActivity : AppCompatActivity() {
         setContentView(R.layout.activity_registered_account)
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager;
         var dbHandler = DBHandler(this@RegisteredAccountActivity)
+        //dbHandler.setImage("")
 
 
         // Account image view
@@ -47,10 +52,15 @@ class RegisteredAccountActivity : AppCompatActivity() {
             .setBottomRightCorner(CornerFamily.ROUNDED,120f)
             .build())
         val photoBlob = dbHandler.getImage()
-        if (photoBlob.size != 0){
+        if (photoBlob != ""){
             hasPhoto = true
-            val photo = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size)
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(photo, 150, 150, false))
+            var dbHandler = DBHandler(this@RegisteredAccountActivity)
+            val photoFileString = dbHandler.getImage()//Convert blob to bytearray
+
+            val myBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.fromFile(File(photoFileString)))
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
+            /*val photo = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size)
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(photo, 150, 150, false))*/
         }
 
 
@@ -187,10 +197,17 @@ class RegisteredAccountActivity : AppCompatActivity() {
         checkEnabled()
         var dbHandler = DBHandler(this@RegisteredAccountActivity)
         val photoBlob = dbHandler.getImage()
-        if (photoBlob.size != 0){
+        if (photoBlob != ""){
             hasPhoto = true
-            val photo = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size)
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(photo, 150, 150, false))
+
+            var dbHandler = DBHandler(this@RegisteredAccountActivity)
+            val photoFileString = dbHandler.getImage()//Convert blob to bytearray
+
+            val myBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.fromFile(File(photoFileString)))
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
+
+            /*val photo = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size)
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(photo, 150, 150, false))*/
         }
     }
 
