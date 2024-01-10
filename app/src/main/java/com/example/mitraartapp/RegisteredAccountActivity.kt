@@ -7,18 +7,15 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
-import android.location.LocationListener;
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.imageview.ShapeableImageView
@@ -27,6 +24,7 @@ import me.bush.translator.Language
 import me.bush.translator.Translator
 import java.io.File
 import java.util.Locale
+
 
 class RegisteredAccountActivity : AppCompatActivity() {
     lateinit var bottomNav: BottomNavigationView
@@ -55,12 +53,8 @@ class RegisteredAccountActivity : AppCompatActivity() {
         if (photoBlob != ""){
             hasPhoto = true
             var dbHandler = DBHandler(this@RegisteredAccountActivity)
-            val photoFileString = dbHandler.getImage()//Convert blob to bytearray
-
-            val myBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.fromFile(File(photoFileString)))
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
-            /*val photo = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size)
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(photo, 150, 150, false))*/
+            var photoFileString = dbHandler.getImage()
+            downloadAvatar(photoFileString)
         }
 
 
@@ -183,13 +177,6 @@ class RegisteredAccountActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, (10).toLong(), (10).toFloat(), locationListener)
@@ -201,13 +188,8 @@ class RegisteredAccountActivity : AppCompatActivity() {
             hasPhoto = true
 
             var dbHandler = DBHandler(this@RegisteredAccountActivity)
-            val photoFileString = dbHandler.getImage()//Convert blob to bytearray
-
-            val myBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.fromFile(File(photoFileString)))
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
-
-            /*val photo = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.size)
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(photo, 150, 150, false))*/
+            var photoFileString = dbHandler.getImage()
+            downloadAvatar(photoFileString)
         }
     }
 
@@ -235,13 +217,6 @@ class RegisteredAccountActivity : AppCompatActivity() {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return
             }
             locationManager?.getLastKnownLocation(provider)?.let { showLocation(it) }
@@ -278,9 +253,6 @@ class RegisteredAccountActivity : AppCompatActivity() {
         //.isProviderEnabled(LocationManager.GPS_PROVIDER))
     }
 
-    //public fun onClickLocationSettings(view : View) {
-    //    startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-    //}
 
     private fun getCityName(lat: Double,long: Double):String?{
         val cityName: String?
@@ -288,5 +260,48 @@ class RegisteredAccountActivity : AppCompatActivity() {
         val Address = geoCoder.getFromLocation(lat,long,3)
         cityName = Address?.get(0)?.adminArea
         return cityName
+    }
+
+    fun removeUnwantedString(path: String): String {
+        //pathUri = "content://com.google.android.apps.photos.contentprovider/-1/2/content://media/external/video/media/5213/ORIGINAL/NONE/2106970034"
+        var pathUri = path
+        pathUri = pathUri.replace("%3A", ":")
+        pathUri = pathUri.replace("%2F", "/")
+        val d1 = pathUri.split("content://".toRegex()).dropLastWhile { it.isEmpty() }
+            .toTypedArray()
+        for (item1 in d1) {
+            if (item1.contains("media/")) {
+                val d2 = item1.split("/ORIGINAL/".toRegex()).dropLastWhile { it.isEmpty() }
+                    .toTypedArray()
+                for (item2 in d2) {
+                    if (item2.contains("media/")) {
+                        pathUri = "content://$item2"
+                        break
+                    }
+                }
+                break
+            }
+        }
+        //pathUri = "content://media/external/video/media/5213"
+        return pathUri
+    }
+    fun downloadAvatar(photoFileStr: String){
+        var photoFileString = photoFileStr
+        // если получили из GooglePhotos
+        if ("com.google.android.apps.photos.contentprovider" in photoFileString) {
+            photoFileString = removeUnwantedString(photoFileString)
+            val resolver = contentResolver
+            val cursor = Uri.parse(photoFileString).let { it1 -> resolver.query(it1, null, null, null, null) }
+            val dataIndex = cursor!!.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+            cursor.moveToFirst()
+            val imagePath = cursor.getString(dataIndex)
+            val myBitmap = BitmapFactory.decodeFile(imagePath)
+            cursor.close()
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
+        }
+        else if ("files" in photoFileString){
+            val myBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.fromFile(File(photoFileString)))
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
+        }
     }
 }

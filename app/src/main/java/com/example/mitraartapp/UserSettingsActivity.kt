@@ -1,7 +1,7 @@
 package com.example.mitraartapp
 
-import android.app.Activity
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -33,9 +33,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
 import java.io.File
 import java.io.IOException
-import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.*
 
 
@@ -43,14 +41,10 @@ class UserSettingsActivity : AppCompatActivity() {
     lateinit var bottomNav: BottomNavigationView
     lateinit var photoImageView: ShapeableImageView
     var hasPhoto = false
-
-
     private var photoFile: File? = null
     private val CAPTURE_IMAGE_REQUEST = 12
     private lateinit var mCurrentPhotoPath: String
     private val IMAGE_DIRECTORY_NAME = "MITRA"
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,9 +70,8 @@ class UserSettingsActivity : AppCompatActivity() {
         if (hasPhoto) {
             photoLayout.visibility = View.INVISIBLE
             var dbHandler = DBHandler(this@UserSettingsActivity)
-            val photoFileString = dbHandler.getImage()
-            val myBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.fromFile(File(photoFileString)))
-            photoImageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
+            var photoFileString = dbHandler.getImage()
+            downloadAvatar(photoFileString)
 
         }
         photoImageView.setOnClickListener{
@@ -128,7 +121,7 @@ class UserSettingsActivity : AppCompatActivity() {
                 }
             }
             addPhotoButton.setOnClickListener{
-                val pickImg = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                val pickImg = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 changeImage.launch(pickImg)
             }
             deletePhotoButton.setOnClickListener{
@@ -222,15 +215,15 @@ class UserSettingsActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK) {
+        // получили первый раз с камеры
+        if (requestCode == CAPTURE_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
             val myBitmap = BitmapFactory.decodeFile(photoFile!!.getAbsolutePath())
             photoImageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
             var dbHandler = DBHandler(this@UserSettingsActivity)
             dbHandler.setImage(photoFile!!.absolutePath)
             hasPhoto = true
         } else {
-            displayMessage(baseContext, "Request cancelled or something went wrong.")
+            //displayMessage(baseContext, "Request cancelled or something went wrong.")
         }
     }
 
@@ -241,12 +234,8 @@ class UserSettingsActivity : AppCompatActivity() {
         if (hasPhoto) {
             photoLayout.visibility = View.INVISIBLE
             var dbHandler = DBHandler(this@UserSettingsActivity)
-            val photoFileString = dbHandler.getImage()//Convert blob to bytearray
-
-            val myBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.fromFile(File(photoFileString)))
-            //myBitmap.height
-            photoImageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
-
+            var photoFileString = dbHandler.getImage()
+            downloadAvatar(photoFileString)
         }
     }
 
@@ -255,6 +244,7 @@ class UserSettingsActivity : AppCompatActivity() {
         private const val pic_id = 123
     }
 
+    // начало функций для камеры
     private fun captureImage2() {
 
         try {
@@ -357,6 +347,7 @@ class UserSettingsActivity : AppCompatActivity() {
     private fun displayMessage(context: Context, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
+    // конец функций для камеры
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -369,7 +360,8 @@ class UserSettingsActivity : AppCompatActivity() {
 
     }
 
-    private val changeImage =
+    // onActivityResult для выбора из галереи
+    val changeImage =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) {
@@ -378,11 +370,63 @@ class UserSettingsActivity : AppCompatActivity() {
                 val imgUri = data?.data
                 var dbHandler = DBHandler(this@UserSettingsActivity)
                 dbHandler.setImage(imgUri.toString())
-                val myBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imgUri)
+                val photoLayout = findViewById<LinearLayout>(R.id.ll1)
+                photoLayout.visibility = View.INVISIBLE
+
+                val resolver = contentResolver
+                val cursor = imgUri?.let { it1 -> resolver.query(it1, null, null, null, null) }
+                val dataIndex = cursor!!.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+                cursor.moveToFirst()
+                val imagePath = cursor.getString(dataIndex)
+                val myBitmap = BitmapFactory.decodeFile(imagePath)
+                cursor.close()
+
                 photoImageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
-
-
-                //photoImageView.setImageURI(imgUri)
             }
         }
+
+    // функция для обработки пути из GooglePhotos
+    fun removeUnwantedString(path: String): String {
+        //pathUri = "content://com.google.android.apps.photos.contentprovider/-1/2/content://media/external/video/media/5213/ORIGINAL/NONE/2106970034"
+        var pathUri = path
+        pathUri = pathUri.replace("%3A", ":")
+        pathUri = pathUri.replace("%2F", "/")
+        val d1 = pathUri.split("content://".toRegex()).dropLastWhile { it.isEmpty() }
+            .toTypedArray()
+        for (item1 in d1) {
+            if (item1.contains("media/")) {
+                val d2 = item1.split("/ORIGINAL/".toRegex()).dropLastWhile { it.isEmpty() }
+                    .toTypedArray()
+                for (item2 in d2) {
+                    if (item2.contains("media/")) {
+                        pathUri = "content://$item2"
+                        break
+                    }
+                }
+                break
+            }
+        }
+        //pathUri = "content://media/external/video/media/5213"
+        return pathUri
+    }
+
+    fun downloadAvatar(photoFileStr: String){
+        var photoFileString = photoFileStr
+        // если получили из GooglePhotos
+        if ("com.google.android.apps.photos.contentprovider" in photoFileString) {
+            photoFileString = removeUnwantedString(photoFileString)
+            val resolver = contentResolver
+            val cursor = Uri.parse(photoFileString).let { it1 -> resolver.query(it1, null, null, null, null) }
+            val dataIndex = cursor!!.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+            cursor.moveToFirst()
+            val imagePath = cursor.getString(dataIndex)
+            val myBitmap = BitmapFactory.decodeFile(imagePath)
+            cursor.close()
+            photoImageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
+        }
+        else if ("files" in photoFileString){
+            val myBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.fromFile(File(photoFileString)))
+            photoImageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
+        }
+    }
 }

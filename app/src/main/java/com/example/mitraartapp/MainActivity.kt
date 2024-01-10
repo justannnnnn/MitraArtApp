@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         //dbHandler!!.deleteTable()
         //dbHandler!!.createTable()
         //val flag = dbHandler!!.tableExists()
+        //dbHandler!!.setImage("")
 
         // Carousel(each 3 sec changes)
         val carousel: ImageCarousel = findViewById(R.id.carousel)
