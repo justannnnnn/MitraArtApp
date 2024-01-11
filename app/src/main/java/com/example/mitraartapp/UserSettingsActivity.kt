@@ -40,6 +40,10 @@ import java.util.*
 class UserSettingsActivity : AppCompatActivity() {
     lateinit var bottomNav: BottomNavigationView
     lateinit var photoImageView: ShapeableImageView
+    lateinit var deletePhotoButton: Button
+    lateinit var view: View
+
+
     var hasPhoto = false
     private var photoFile: File? = null
     private val CAPTURE_IMAGE_REQUEST = 12
@@ -69,18 +73,19 @@ class UserSettingsActivity : AppCompatActivity() {
         val photoLayout = findViewById<LinearLayout>(R.id.ll1)
         if (hasPhoto) {
             photoLayout.visibility = View.INVISIBLE
+            photoImageView.visibility = View.VISIBLE
             var dbHandler = DBHandler(this@UserSettingsActivity)
             var photoFileString = dbHandler.getImage()
             downloadAvatar(photoFileString)
-
         }
+        else photoLayout.visibility = View.VISIBLE
         photoImageView.setOnClickListener{
             val dialog = BottomSheetDialog(this)
-            val view = layoutInflater.inflate(R.layout.button_sheet_dialog, null)
+            view = layoutInflater.inflate(R.layout.button_sheet_dialog, null)
 
             val makePhotoButton = view.findViewById<Button>(R.id.make_photo_button)
             val addPhotoButton = view.findViewById<Button>(R.id.add_photo_button)
-            val deletePhotoButton = view.findViewById<Button>(R.id.delete_photo_button)
+            deletePhotoButton = view.findViewById<Button>(R.id.delete_photo_button)
             if (!hasPhoto) deletePhotoButton.visibility = View.INVISIBLE
 
             makePhotoButton.setOnClickListener{
@@ -95,6 +100,9 @@ class UserSettingsActivity : AppCompatActivity() {
                 changeImage.launch(pickImg)
             }
             deletePhotoButton.setOnClickListener{
+                dbHandler.setImage("")
+                hasPhoto = false
+                this.onResume()
 
             }
             dialog.setCancelable(true) // avoid closing of dialog box when clicking on the screen
@@ -106,11 +114,11 @@ class UserSettingsActivity : AppCompatActivity() {
         val photoButton = findViewById<ImageButton>(R.id.photoImageButton)
         photoButton.setOnClickListener{
             val dialog = BottomSheetDialog(this)
-            val view = layoutInflater.inflate(R.layout.button_sheet_dialog, null)
+            view = layoutInflater.inflate(R.layout.button_sheet_dialog, null)
 
             val makePhotoButton = view.findViewById<Button>(R.id.make_photo_button)
             val addPhotoButton = view.findViewById<Button>(R.id.add_photo_button)
-            val deletePhotoButton = view.findViewById<Button>(R.id.delete_photo_button)
+            deletePhotoButton = view.findViewById<Button>(R.id.delete_photo_button)
             if (!hasPhoto) deletePhotoButton.visibility = View.INVISIBLE
 
             makePhotoButton.setOnClickListener{
@@ -125,7 +133,9 @@ class UserSettingsActivity : AppCompatActivity() {
                 changeImage.launch(pickImg)
             }
             deletePhotoButton.setOnClickListener{
-
+                dbHandler.setImage("")
+                hasPhoto = false
+                this.onResume()
             }
             dialog.setCancelable(true) // avoid closing of dialog box when clicking on the screen
             dialog.setContentView(view) // setting content view to our view
@@ -222,6 +232,7 @@ class UserSettingsActivity : AppCompatActivity() {
             var dbHandler = DBHandler(this@UserSettingsActivity)
             dbHandler.setImage(photoFile!!.absolutePath)
             hasPhoto = true
+            this.onResume()
         } else {
             //displayMessage(baseContext, "Request cancelled or something went wrong.")
         }
@@ -233,9 +244,17 @@ class UserSettingsActivity : AppCompatActivity() {
         val photoLayout = findViewById<LinearLayout>(R.id.ll1)
         if (hasPhoto) {
             photoLayout.visibility = View.INVISIBLE
+            photoImageView.visibility = View.VISIBLE
             var dbHandler = DBHandler(this@UserSettingsActivity)
             var photoFileString = dbHandler.getImage()
             downloadAvatar(photoFileString)
+        }
+        else {
+            photoLayout.visibility = View.VISIBLE
+            photoImageView.visibility = View.INVISIBLE
+            val view = layoutInflater.inflate(R.layout.button_sheet_dialog, null)
+            val deletePhotoButton = view.findViewById<Button>(R.id.delete_photo_button)
+            deletePhotoButton.visibility = View.INVISIBLE
         }
     }
 
@@ -251,7 +270,7 @@ class UserSettingsActivity : AppCompatActivity() {
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             photoFile = createImageFile4()
             if (photoFile != null) {
-                displayMessage(baseContext, photoFile!!.getAbsolutePath())
+                //displayMessage(baseContext, photoFile!!.getAbsolutePath())
                 Log.i("Mayank", photoFile!!.getAbsolutePath())
                 val photoURI = Uri.fromFile(photoFile)
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
@@ -276,7 +295,7 @@ class UserSettingsActivity : AppCompatActivity() {
                 try {
 
                     photoFile = createImageFile()
-                    displayMessage(baseContext, photoFile!!.getAbsolutePath())
+                    //displayMessage(baseContext, photoFile!!.getAbsolutePath())
                     Log.i("Mayank", photoFile!!.getAbsolutePath())
 
                     // Continue only if the File was successfully created

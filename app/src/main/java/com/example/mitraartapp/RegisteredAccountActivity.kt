@@ -38,7 +38,6 @@ class RegisteredAccountActivity : AppCompatActivity() {
         setContentView(R.layout.activity_registered_account)
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager;
         var dbHandler = DBHandler(this@RegisteredAccountActivity)
-        //dbHandler.setImage("")
 
 
         // Account image view
@@ -55,6 +54,10 @@ class RegisteredAccountActivity : AppCompatActivity() {
             var dbHandler = DBHandler(this@RegisteredAccountActivity)
             var photoFileString = dbHandler.getImage()
             downloadAvatar(photoFileString)
+        }
+        else {
+            imageView.setBackgroundColor(resources.getColor(R.color.grey))
+            imageView.setImageBitmap(null)
         }
 
 
@@ -186,16 +189,31 @@ class RegisteredAccountActivity : AppCompatActivity() {
         val photoBlob = dbHandler.getImage()
         if (photoBlob != ""){
             hasPhoto = true
-
             var dbHandler = DBHandler(this@RegisteredAccountActivity)
             var photoFileString = dbHandler.getImage()
             downloadAvatar(photoFileString)
+        }
+        else {
+            imageView.setBackgroundColor(resources.getColor(R.color.grey))
+            imageView.setImageBitmap(null)
         }
     }
 
     override fun onPause() {
         super.onPause()
         locationManager.removeUpdates(locationListener)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val dbHandler = DBHandler(this@RegisteredAccountActivity)
+        val photoBlob = dbHandler.getImage()
+        if (photoBlob != ""){
+            hasPhoto = true
+            downloadAvatar(photoBlob)
+        }
+        else { imageView.setBackgroundColor(resources.getColor(R.color.grey))
+                imageView.setImageBitmap(null)}
     }
 
     private val locationListener = object : LocationListener {
