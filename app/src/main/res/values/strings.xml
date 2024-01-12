@@ -111,4 +111,13 @@
     <string name="add_from_gallery">Добавить фото из галереи</string>
     <string name="delete_photo">Удалить фото</string>
 
+    <string name="enter_new_email">Введите новый e-mail</string>
+    <string name="sending_link_text">На новый e-mail будет отправлена ссылка-подтверждение</string>
+    <string name="send_link">Отправить ссылку</string>
+    
+    <string name="password_change">Смена пароля</string>
+    <string name="enter_old_password">Введите старый пароль</string>
+    <string name="enter_new_password">Введите новый пароль</string>
+    <string name="repeat_new_password">Повторите новый пароль</string>
+
 </resources>

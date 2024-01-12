@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "134686098426",
+    "project_id": "mitraartapp",
+    "storage_bucket": "mitraartapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134686098426:android:2876a348ccdc0875961a43",
+        "android_client_info": {
+          "package_name": "com.example.mitraartapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6oaz9-qCY9DTd7Qe8MJP5uq8QpYA2_Ss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

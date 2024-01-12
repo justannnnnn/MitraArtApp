@@ -5,6 +5,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 
 class DBHandler  // creating a constructor for our database handler.
@@ -105,6 +107,16 @@ class DBHandler  // creating a constructor for our database handler.
         val cursor = db.rawQuery("SELECT " + IMAGE + " FROM " + TABLE_NAME, null)
         cursor.moveToNext()
         return cursor.getString(0)
+    }
+
+    @OptIn(ExperimentalEncodingApi::class)
+    fun getPassword() : String{
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT " + PASSWORD_COL + " FROM " + TABLE_NAME, null)
+        cursor.moveToNext()
+        val ba = ByteArray(0)
+        Base64.decodeIntoByteArray(cursor.getString(0), ba)
+        return ba.toString()
     }
 
 
