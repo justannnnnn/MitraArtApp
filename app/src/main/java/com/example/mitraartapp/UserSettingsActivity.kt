@@ -43,6 +43,7 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.io.encoding.Base64
 
 
 class UserSettingsActivity : AppCompatActivity() {
@@ -241,6 +242,14 @@ class UserSettingsActivity : AppCompatActivity() {
             dialog.show()
         }
 
+        // Password text view
+        val passwordText = findViewById<TextView>(R.id.passTextViewClickable)
+        passwordText.text = dbHandler.getPassword()
+        passwordText.setOnClickListener {
+            val intent = Intent(this@UserSettingsActivity, ChangePasswordActivity::class.java)
+            startActivity(intent)
+        }
+
 
             // Spinners
             val mSpinnerType = findViewById<Spinner>(R.id.typeSpinner)
@@ -355,10 +364,10 @@ class UserSettingsActivity : AppCompatActivity() {
         override fun onResume() {
             super.onResume()
             val photoLayout = findViewById<LinearLayout>(R.id.ll1)
+            var dbHandler = DBHandler(this@UserSettingsActivity)
             if (hasPhoto) {
                 photoLayout.visibility = View.INVISIBLE
                 photoImageView.visibility = View.VISIBLE
-                var dbHandler = DBHandler(this@UserSettingsActivity)
                 var photoFileString = dbHandler.getImage()
                 downloadAvatar(photoFileString)
             } else {
@@ -368,6 +377,8 @@ class UserSettingsActivity : AppCompatActivity() {
                 val deletePhotoButton = view.findViewById<Button>(R.id.delete_photo_button)
                 deletePhotoButton.visibility = View.INVISIBLE
             }
+            val passwordTextView = findViewById<TextView>(R.id.passTextViewClickable)
+            passwordTextView.text = dbHandler.getPassword()
         }
 
 

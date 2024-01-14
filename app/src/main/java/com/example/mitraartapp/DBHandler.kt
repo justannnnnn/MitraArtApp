@@ -114,9 +114,8 @@ class DBHandler  // creating a constructor for our database handler.
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT " + PASSWORD_COL + " FROM " + TABLE_NAME, null)
         cursor.moveToNext()
-        val ba = ByteArray(0)
-        Base64.decodeIntoByteArray(cursor.getString(0), ba)
-        return ba.toString()
+        val str = cursor.getString(0).dropLast(1)
+        return String(Base64.decode(str))
     }
 
 

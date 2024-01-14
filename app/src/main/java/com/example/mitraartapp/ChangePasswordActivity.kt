@@ -1,7 +1,10 @@
 package com.example.mitraartapp
 
+import android.content.ContentValues.TAG
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
@@ -9,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import com.example.mitraartapp.R
 import com.google.android.material.textfield.TextInputEditText
+import java.sql.ResultSet
+import java.sql.SQLException
 
 class ChangePasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +58,7 @@ class ChangePasswordActivity : AppCompatActivity() {
         saveButton.setOnClickListener{
             val dbHandler = DBHandler(this@ChangePasswordActivity)
             val db_password = dbHandler.getPassword()
+            Log.e(TAG, "old password: " + db_password)
             if (textFields.any{it.error != null} || textFields.any{it.text.contentEquals("")}) {
                 Toast.makeText(
                     this@ChangePasswordActivity,
@@ -80,16 +86,49 @@ class ChangePasswordActivity : AppCompatActivity() {
                 oldPassTextField.setError("Wrong old password")
                 oldPassTextField.text = null
             }
-            dbHandler.setPassword(Base64.encodeToString(newPassTextField.text?.toString()?.toByteArray(), 0))
-            Toast.makeText(
-                this@ChangePasswordActivity,
-                "Password changed",
-                Toast.LENGTH_SHORT
-            ).show()
-            finish()
+            else{
+                dbHandler.setPassword(Base64.encodeToString(newPassTextField.text?.toString()?.toByteArray(), 0))
+                Toast.makeText(
+                    this@ChangePasswordActivity,
+                    "Password changed",
+                    Toast.LENGTH_SHORT
+                ).show()
+                val updateObj = updatePassword(dbHandler.getEmail(), newPassTextField.text.toString())
+                updateObj.execute("")
+                Log.e(TAG, "new password: " + dbHandler.getPassword())
+                finish()
+            }
         }
 
+    }
 
+    // объект для смены пароля в глобальной БД
+    class updatePassword(email: String?, password: String?, firstName: String? = null, lastName :String? = null) : AsyncTask<String, Unit, String>() {
+        val e = email
+        val p = password
+        val fn = firstName
+        val ln = lastName
+        var res = "nothing"
+        @Deprecated("Deprecated in Java")
+        override fun onPreExecute() {
+            super.onPreExecute();
+            try {
+                val connect = ConnectionHelper.CONN();
+                var queryStmt = "UPDATE dbo.Account SET PasswordHash = " + "'" + Base64.encodeToString(
+                    p?.toByteArray(), 0) + "' WHERE Email = '" + e + "'"
+                val preparedStatement = connect?.prepareStatement(queryStmt)
+                preparedStatement?.executeUpdate()
+                preparedStatement?.close()
 
+            } catch (e : SQLException) {
+                e.printStackTrace()
+            } catch (e : Exception) {
+                //Log("Exception. Please check your code and database.")
+            }
+        }
+        @Deprecated("Deprecated in Java")
+        override protected fun doInBackground(vararg params : String) : String? {
+            return "nothing"
+        }
     }
 }
