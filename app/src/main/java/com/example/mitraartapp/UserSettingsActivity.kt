@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -41,6 +42,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.io.File
 import java.io.IOException
+import java.sql.ResultSet
+import java.sql.SQLException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.io.encoding.Base64
@@ -241,6 +244,12 @@ class UserSettingsActivity : AppCompatActivity() {
             dialog.setContentView(viewEmail) // setting content view to our view
             dialog.show()
         }
+
+        // ID text view
+        val idTextView = findViewById<TextView>(R.id.id2TextView)
+        val getIDObj = getID(dbHandler.getEmail())
+        getIDObj.execute("")
+        idTextView.text = getIDObj.res
 
         // Password text view
         val passwordText = findViewById<TextView>(R.id.passTextViewClickable)
@@ -603,6 +612,37 @@ class UserSettingsActivity : AppCompatActivity() {
             }
         }
 
+    // объект для получения ID из глобальной БД
+    class getID(email: String?) : AsyncTask<String, Unit, String>() {
+        val e = email
+        var res = "nothing"
+        @Deprecated("Deprecated in Java")
+        override fun onPreExecute() {
+            super.onPreExecute();
+            try {
+                val connect = ConnectionHelper.CONN();
+                var queryStmt = "SELECT Id FROM dbo.Account WHERE Email = '" + e + "'"
+                val preparedStatement = connect?.prepareStatement(queryStmt);
+                var resultQuery: ResultSet? = null
+                resultQuery = preparedStatement?.executeQuery()
+                // если в ResultSet есть строка - пользователь есть в БД
+                if (resultQuery!!.next()){
+                    res = resultQuery.getString(1)
+                }
+                preparedStatement?.close()
+
+            } catch (e : SQLException) {
+                e.printStackTrace()
+            } catch (e : Exception) {
+                Log.e(TAG, "Exception. Please check your code and database.")
+            }
+        }
+        @Deprecated("Deprecated in Java")
+        override protected fun doInBackground(vararg params : String) : String? {
+            return "nothing"
+        }
+    }
+
         /*private fun verifyEmail() {
             val mUser = mAuth!!.currentUser
             val actionCodeSettings = ActionCodeSettings.newBuilder()
@@ -627,4 +667,6 @@ class UserSettingsActivity : AppCompatActivity() {
                     }
                 }
         }*/
+
+
 }
