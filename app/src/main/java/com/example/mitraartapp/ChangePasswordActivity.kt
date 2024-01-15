@@ -101,34 +101,4 @@ class ChangePasswordActivity : AppCompatActivity() {
         }
 
     }
-
-    // объект для смены пароля в глобальной БД
-    class updatePassword(email: String?, password: String?, firstName: String? = null, lastName :String? = null) : AsyncTask<String, Unit, String>() {
-        val e = email
-        val p = password
-        val fn = firstName
-        val ln = lastName
-        var res = "nothing"
-        @Deprecated("Deprecated in Java")
-        override fun onPreExecute() {
-            super.onPreExecute();
-            try {
-                val connect = ConnectionHelper.CONN();
-                var queryStmt = "UPDATE dbo.Account SET PasswordHash = " + "'" + Base64.encodeToString(
-                    p?.toByteArray(), 0) + "' WHERE Email = '" + e + "'"
-                val preparedStatement = connect?.prepareStatement(queryStmt)
-                preparedStatement?.executeUpdate()
-                preparedStatement?.close()
-
-            } catch (e : SQLException) {
-                e.printStackTrace()
-            } catch (e : Exception) {
-                //Log("Exception. Please check your code and database.")
-            }
-        }
-        @Deprecated("Deprecated in Java")
-        override protected fun doInBackground(vararg params : String) : String? {
-            return "nothing"
-        }
-    }
 }

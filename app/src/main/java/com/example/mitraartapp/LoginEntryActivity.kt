@@ -48,12 +48,12 @@ class LoginEntryActivity : AppCompatActivity() {
             }
             val login = loginTextField.text.toString()
             val password = Base64.encodeToString(passwordTextField.text.toString().toByteArray(), 0)
-            val checkUserObj = LoginEntryActivity.checkUser(login, password)
+            val checkUserObj = checkUser(email = login, password = password)
             checkUserObj.execute("")
             var result = checkUserObj.res
             if (result.equals("REGISTERED")){
-                var getUserFirst = LoginEntryActivity.getUserInfo(login, "FirstName")
-                var getUserLast = LoginEntryActivity.getUserInfo(login, "LastName")
+                var getUserFirst = getUserInfo(login, "FirstName")
+                var getUserLast = getUserInfo(login, "LastName")
                 getUserFirst.execute("")
                 getUserLast.execute("")
                 val first_name = getUserFirst.res
@@ -74,76 +74,6 @@ class LoginEntryActivity : AppCompatActivity() {
         // Forget login or password button
 
 
-        }
-    }
-
-    class checkUser(login: String?, password: String?) : AsyncTask<String, Unit, String>() {
-        val e = login
-        val p = password
-        var res = "nothing"
-        @Deprecated("Deprecated in Java")
-        override fun onPreExecute() {
-            super.onPreExecute();
-            try {
-                val connect = ConnectionHelper.CONN();
-                var queryStmt = "SELECT Email FROM dbo.Account WHERE Email = " + "'" + e + "' and PasswordHash = '" + p + "'"
-                //TODO: разобраться с хэшированием и с логикой входа с паролем
-                //if (p != null) queryStmt += "AND PasswordHash = '" + p + "'"
-                val preparedStatement = connect?.prepareStatement(queryStmt);
-                var resultQuery: ResultSet? = null
-                resultQuery = preparedStatement?.executeQuery()
-                // если в ResultSet есть строка - пользователь есть в БД
-                if (resultQuery!!.next()){
-                    res = "REGISTERED"
-                }
-                else res = "NOT REGISTERED"
-                preparedStatement?.close()
-
-            } catch (e : SQLException) {
-                e.printStackTrace()
-                res = e.toString()
-            } catch (e : Exception) {
-                res = "Exception. Please check your code and database."
-            }
-        }
-        @Deprecated("Deprecated in Java")
-        override protected fun doInBackground(vararg params : String) : String? {
-            return "nothing"
-        }
-    }
-
-    class getUserInfo(login: String?, column: String?) : AsyncTask<String, Unit, String>() {
-        val e = login
-        val c = column
-        var res = "nothing"
-        @Deprecated("Deprecated in Java")
-        override fun onPreExecute() {
-            super.onPreExecute();
-            try {
-                val connect = ConnectionHelper.CONN();
-                var queryStmt = "SELECT " + c + " FROM dbo.Account WHERE Email = " + "'" + e + "'"
-                val preparedStatement = connect?.prepareStatement(queryStmt);
-                var resultQuery: ResultSet? = null
-                resultQuery = preparedStatement?.executeQuery()
-                // если в ResultSet есть строка - пользователь есть в БД
-                if (resultQuery!!.next()){
-                    //val columns = resultQuery.getMetaData().getColumnCount();
-                    // получаем значение нужной нам колонки
-                    res = resultQuery.getString(1)
-                }
-                else res = "NOT FOUND"
-                preparedStatement?.close()
-
-            } catch (e : SQLException) {
-                e.printStackTrace()
-                res = e.toString()
-            } catch (e : Exception) {
-                res = "Exception. Please check your code and database."
-            }
-        }
-        @Deprecated("Deprecated in Java")
-        override protected fun doInBackground(vararg params : String) : String? {
-            return "nothing"
         }
     }
 }

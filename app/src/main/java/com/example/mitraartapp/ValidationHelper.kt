@@ -27,19 +27,14 @@ class ValidationHelper {
 
     fun rightPassport(data: Editable) : Boolean?{
         return data.length == 10 && data.all { it.isDigit() }
-        /*val request = Request.Builder()
-            .url("https://parser-api.com/parser/passport_api/?key=1234&passport_series=6017&passport_number=277920&first_name=Анна&last_name=Кирицева")
-            .build()
-        var res : String? = null
+    }
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {}
-            override fun onResponse(call: Call, response: Response) {
-                res = response.body?.string()
-            }
-        })
-        return res != "nothing"*/
+    fun rightINN(data: Editable) : Boolean?{
+        return data.length == 12 && data.all { it.isDigit() }
+    }
 
+    fun rightOGRN(data: Editable) : Boolean?{
+        return data.length == 13 && data.all { it.isDigit() }
     }
 
 }

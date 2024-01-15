@@ -51,7 +51,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name_TextInputL"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="5dp"
                 android:textColorHint="@color/medium_grey"
                 app:boxBackgroundColor="@color/grey"
@@ -83,7 +83,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inn_TextInputL"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="5dp"
                 android:textColorHint="@color/medium_grey"
                 app:boxBackgroundColor="@color/grey"
@@ -115,7 +115,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/ogrn_TextInputL"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="5dp"
                 android:textColorHint="@color/medium_grey"
                 app:boxBackgroundColor="@color/grey"
@@ -147,7 +147,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passport_TextInputL"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="5dp"
                 android:textColorHint="@color/medium_grey"
                 app:boxBackgroundColor="@color/grey"
@@ -179,7 +179,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/pass_date_TextInputL"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="5dp"
                 android:textColorHint="@color/medium_grey"
                 app:boxBackgroundColor="@color/grey"
@@ -211,7 +211,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/pass_residence_TextInputL"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="5dp"
                 android:textColorHint="@color/medium_grey"
                 app:boxBackgroundColor="@color/grey"
@@ -243,7 +243,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/fact_residence_TextInputL"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="5dp"
                 android:textColorHint="@color/medium_grey"
                 app:boxBackgroundColor="@color/grey"
@@ -273,7 +273,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/fact_residence_TextInputL">
 
                 <Button
-                    android:id="@+id/continue_button"
+                    android:id="@+id/save_button"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

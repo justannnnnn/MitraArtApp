@@ -130,46 +130,4 @@ class FirstEntryActivity : AppCompatActivity() {
             Toast.makeText(this,"signInResult:failed code= " + e.message, Toast.LENGTH_SHORT).show()
         }
     }
-
-    // class for checking is user's info in MS SQL base
-    class checkUser(email: String?, password: String?, firstName: String? = null, lastName :String? = null) : AsyncTask<String, Unit, String>() {
-        val e = email
-        val p = password
-        val fn = firstName
-        val ln = lastName
-        var res = "nothing"
-        @Deprecated("Deprecated in Java")
-        override fun onPreExecute() {
-            super.onPreExecute();
-            try {
-                val connect = ConnectionHelper.CONN();
-                var queryStmt = "SELECT Email FROM dbo.Account WHERE Email = " + "'" + e + "'"
-                if (e == null) {
-                    queryStmt = "SELECT Email FROM dbo.Account WHERE FirstName = '" + fn + "' AND LastName = '" + ln + "'"
-                }
-                //TODO: разобраться с хэшированием и с логикой входа с паролем
-                //if (p != null) queryStmt += "AND PasswordHash = '" + p + "'"
-                val preparedStatement = connect?.prepareStatement(queryStmt);
-                var resultQuery: ResultSet? = null
-                resultQuery = preparedStatement?.executeQuery()
-                // если в ResultSet есть строка - пользователь есть в БД
-                if (resultQuery!!.next()){
-                        res = resultQuery.getString(1)
-                }
-                else res = "NOT REGISTERED"
-                preparedStatement?.close()
-
-            } catch (e : SQLException) {
-                e.printStackTrace()
-                res = e.toString()
-            } catch (e : Exception) {
-                res = "Exception. Please check your code and database."
-            }
-        }
-         @Deprecated("Deprecated in Java")
-         override protected fun doInBackground(vararg params : String) : String? {
-             return "nothing"
-         }
-    }
-
 }
