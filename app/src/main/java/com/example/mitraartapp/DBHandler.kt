@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import okhttp3.internal.threadName
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -118,7 +119,15 @@ class DBHandler  // creating a constructor for our database handler.
         return String(Base64.decode(str))
     }
 
+    fun setName(name: String){
+        val db = this.writableDatabase
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + FIRSTNAME_COL + " = '" + name + "'")
+    }
 
+    fun setSurname(surname: String){
+        val db = this.writableDatabase
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + LASTNAME_COL + " = '" + surname + "'")
+    }
     fun setPassword(password: String){
         val db = this.writableDatabase
         db.execSQL("UPDATE " + TABLE_NAME + " SET " + PASSWORD_COL + " = '" + password + "'")

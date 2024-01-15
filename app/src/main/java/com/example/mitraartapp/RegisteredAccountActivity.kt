@@ -197,6 +197,9 @@ class RegisteredAccountActivity : AppCompatActivity() {
             imageView.setBackgroundColor(resources.getColor(R.color.grey))
             imageView.setImageBitmap(null)
         }
+        var accountNameTextView = findViewById<TextView>(R.id.account_name)
+        accountNameTextView.text = dbHandler.getName() + " " + dbHandler.getSurname()
+
     }
 
     override fun onPause() {

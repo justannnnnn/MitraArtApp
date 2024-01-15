@@ -52,7 +52,7 @@ class RegistrationActivity : AppCompatActivity() {
         nameTextField.doAfterTextChanged {
             var name = nameTextField.text
             if (!validation.isText(name)!!){
-                surnameTextField.setError("The name should consist of letters")
+                nameTextField.setError("The name should consist of letters")
             }
             else nameTextField.error = null
 
