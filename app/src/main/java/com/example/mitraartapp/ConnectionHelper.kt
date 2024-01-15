@@ -424,3 +424,87 @@ class checkIPType(id: String) : AsyncTask<String, Unit, String>() {
         return "nothing"
     }
 }
+
+// добавление юр. лица
+class addLegalType(id: String, name: String, inn: String, ogrn: String, ordinance: String, regAddress: String, isRegistered: Boolean = false) : AsyncTask<String, Unit, String>(){
+    val id = id
+    val n = name
+    val inn = inn
+    val ogrn = ogrn
+    val order = ordinance
+    val ra = regAddress
+    val is_reg = isRegistered
+    var queryStmt = ""
+    @Deprecated("Deprecated in Java")
+    override fun onPreExecute() {
+        super.onPreExecute();
+        try {
+            val connect = ConnectionHelper.CONN()
+            if (is_reg){
+                queryStmt = "UPDATE dbo.LegalTypes SET Name = '" + n + "', INN = '" + inn + "', OGRN = '" + ogrn + "', " +
+                        "Ordinance = '" + order + "', RegistrationAddress = '" + ra + "' WHERE Id = '" + id + "'"
+            }
+            else {
+                queryStmt = "INSERT INTO dbo.LegalTypes(Id, Name, INN, OGRN, " +
+                        "Ordinance, RegistrationAddress) " +
+                        "VALUES ('" + id + "', '" + n + "', '" + inn + "', '" + ogrn + "', '" + order + "', '" + ra + "')"
+            }
+
+            var preparedStatement = connect?.prepareStatement(queryStmt)
+            preparedStatement?.executeUpdate()
+            preparedStatement?.close()
+
+        } catch (e : SQLException) {
+            e.printStackTrace()
+        } catch (e : Exception) {
+            //Log("Exception. Please check your code and database.")
+        }
+    }
+    @Deprecated("Deprecated in Java")
+    override protected fun doInBackground(vararg params : String) : String? {
+        return "nothing"
+    }
+}
+
+// проверка на существование юр. лица
+class checkLegalType(id: String) : AsyncTask<String, Unit, String>() {
+    val id = id
+    var inn = ""
+    var n = ""
+    var ogrn = ""
+    var order = ""
+    var ra = ""
+    var res = "nothing"
+    @Deprecated("Deprecated in Java")
+    override fun onPreExecute() {
+        super.onPreExecute();
+        try {
+            val connect = ConnectionHelper.CONN();
+            var queryStmt = "SELECT Name, INN, OGRN, Ordinance, RegistrationAddress FROM dbo.LegalTypes WHERE Id = " + "'" + id + "'"
+            val preparedStatement = connect?.prepareStatement(queryStmt);
+            var resultQuery: ResultSet? = null
+            resultQuery = preparedStatement?.executeQuery()
+            // если в ResultSet есть строка - пользователь есть в БД
+            if (resultQuery!!.next()){
+                n = resultQuery.getString(1)
+                inn = resultQuery.getString(2)
+                ogrn = resultQuery.getString(3)
+                order = resultQuery.getString(4)
+                ra = resultQuery.getString(5)
+                res = "REGISTERED"
+            }
+            else res = "NOT REGISTERED"
+            preparedStatement?.close()
+
+        } catch (e : SQLException) {
+            e.printStackTrace()
+            res = e.toString()
+        } catch (e : Exception) {
+            res = "Exception. Please check your code and database."
+        }
+    }
+    @Deprecated("Deprecated in Java")
+    override protected fun doInBackground(vararg params : String) : String? {
+        return "nothing"
+    }
+}
