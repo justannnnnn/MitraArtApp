@@ -22,6 +22,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Spinner
+import android.widget.SpinnerAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -54,6 +55,10 @@ class UserSettingsActivity : AppCompatActivity() {
     lateinit var photoImageView: ShapeableImageView
     lateinit var deletePhotoButton: Button
     lateinit var view: View
+    lateinit var mSpinnerType: Spinner
+    lateinit var mSpinnerECP: Spinner
+    lateinit var mArrayAdapterType: ArrayAdapter<CharSequence>
+    lateinit var mArrayAdapterECP: ArrayAdapter<CharSequence>
 
 
     var hasPhoto = false
@@ -261,13 +266,13 @@ class UserSettingsActivity : AppCompatActivity() {
 
 
             // Spinners
-            val mSpinnerType = findViewById<Spinner>(R.id.typeSpinner)
-            val mSpinnerECP = findViewById<Spinner>(R.id.ecpSpinner)
+            mSpinnerType = findViewById<Spinner>(R.id.typeSpinner)
+            mSpinnerECP = findViewById<Spinner>(R.id.ecpSpinner)
 
             // Create an adapter as shown below
-            val mArrayAdapterType =
+            mArrayAdapterType =
                 ArrayAdapter.createFromResource(this, R.array.type, R.layout.spinner_list)
-            val mArrayAdapterECP =
+            mArrayAdapterECP =
                 ArrayAdapter.createFromResource(this, R.array.ecp, R.layout.spinner_list)
             mArrayAdapterType.setDropDownViewResource(R.layout.spinner_list)
             mArrayAdapterECP.setDropDownViewResource(R.layout.spinner_list)
@@ -310,6 +315,26 @@ class UserSettingsActivity : AppCompatActivity() {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             })
+
+        mSpinnerECP.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                itemSelected: View,
+                selectedItemPosition: Int,
+                selectedId: Long
+            ) {
+                when (selectedItemPosition) {
+                    0 -> {
+                        val intent =
+                            Intent(this@UserSettingsActivity, MyECPActivity::class.java)
+                        startActivity(intent)
+                    }
+                    else -> {}
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        })
 
 
             // Bottom menu
@@ -388,6 +413,57 @@ class UserSettingsActivity : AppCompatActivity() {
             }
             val passwordTextView = findViewById<TextView>(R.id.passTextViewClickable)
             passwordTextView.text = dbHandler.getPassword()
+
+            // Spinners
+            mSpinnerType = findViewById<Spinner>(R.id.typeSpinner)
+            mSpinnerECP = findViewById<Spinner>(R.id.ecpSpinner)
+
+            // Create an adapter as shown below
+            mArrayAdapterType =
+                ArrayAdapter.createFromResource(this, R.array.type, R.layout.spinner_list)
+            mArrayAdapterECP =
+                ArrayAdapter.createFromResource(this, R.array.ecp, R.layout.spinner_list)
+            mArrayAdapterType.setDropDownViewResource(R.layout.spinner_list)
+            mArrayAdapterECP.setDropDownViewResource(R.layout.spinner_list)
+
+            // Set the adapter to the Spinner
+            mSpinnerType.adapter = mArrayAdapterType
+            mSpinnerECP.adapter = mArrayAdapterECP
+            mSpinnerType.setSelection(3)
+            mSpinnerECP.setSelection(1)
+
+            mSpinnerType.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    itemSelected: View,
+                    selectedItemPosition: Int,
+                    selectedId: Long
+                ) {
+                    when (selectedItemPosition) {
+                        0 -> {
+                            val intent =
+                                Intent(this@UserSettingsActivity, PhysicalTypeActivity::class.java)
+                            startActivity(intent)
+                        }
+
+                        1 -> {
+                            val intent =
+                                Intent(this@UserSettingsActivity, LegalTypeActivity::class.java)
+                            startActivity(intent)
+                        }
+
+                        2 -> {
+                            val intent =
+                                Intent(this@UserSettingsActivity, IPTypeActivity::class.java)
+                            startActivity(intent)
+                        }
+
+                        else -> {}
+                    }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            })
         }
 
 
@@ -611,37 +687,6 @@ class UserSettingsActivity : AppCompatActivity() {
                 photoImageView.setImageBitmap(Bitmap.createScaledBitmap(myBitmap, 150, 150, false))
             }
         }
-
-    // объект для получения ID из глобальной БД
-    class getID(email: String?) : AsyncTask<String, Unit, String>() {
-        val e = email
-        var res = "nothing"
-        @Deprecated("Deprecated in Java")
-        override fun onPreExecute() {
-            super.onPreExecute();
-            try {
-                val connect = ConnectionHelper.CONN();
-                var queryStmt = "SELECT Id FROM dbo.Account WHERE Email = '" + e + "'"
-                val preparedStatement = connect?.prepareStatement(queryStmt);
-                var resultQuery: ResultSet? = null
-                resultQuery = preparedStatement?.executeQuery()
-                // если в ResultSet есть строка - пользователь есть в БД
-                if (resultQuery!!.next()){
-                    res = resultQuery.getString(1)
-                }
-                preparedStatement?.close()
-
-            } catch (e : SQLException) {
-                e.printStackTrace()
-            } catch (e : Exception) {
-                Log.e(TAG, "Exception. Please check your code and database.")
-            }
-        }
-        @Deprecated("Deprecated in Java")
-        override protected fun doInBackground(vararg params : String) : String? {
-            return "nothing"
-        }
-    }
 
         /*private fun verifyEmail() {
             val mUser = mAuth!!.currentUser

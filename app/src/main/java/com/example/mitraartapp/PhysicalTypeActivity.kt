@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import java.sql.ResultSet
 import java.sql.SQLException
@@ -40,7 +41,19 @@ class PhysicalTypeActivity : AppCompatActivity() {
         // Back button
         var backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener{
-            finish()
+            MaterialAlertDialogBuilder(this@PhysicalTypeActivity)
+                .setTitle("Вы уверены, что хотите выйти?")
+                .setMessage("Чтобы сохранить данные, нажмите на кнопку в конце страницы")
+                .setNegativeButton("Выйти") { dialog, which ->
+                    // Respond to negative button press
+                    dialog.cancel()
+                    finish()
+                }
+                .setPositiveButton("Остаться") { dialog, which ->
+                    // Respond to positive button press
+                    dialog.cancel()
+                }
+                .show()
         }
 
         // Text fields
@@ -185,3 +198,4 @@ class PhysicalTypeActivity : AppCompatActivity() {
 
     }
 }
+

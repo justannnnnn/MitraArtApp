@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -27,7 +28,19 @@ class IPTypeActivity : AppCompatActivity() {
         // Back button
         var backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener{
-            finish()
+            MaterialAlertDialogBuilder(this@IPTypeActivity)
+                .setTitle("Вы уверены, что хотите выйти?")
+                .setMessage("Чтобы сохранить данные, нажмите на кнопку в конце страницы")
+                .setNegativeButton("Выйти") { dialog, which ->
+                    // Respond to negative button press
+                    dialog.cancel()
+                    finish()
+                }
+                .setPositiveButton("Остаться") { dialog, which ->
+                    // Respond to positive button press
+                    dialog.cancel()
+                }
+                .show()
         }
 
         // Text fields

@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.mitraartapp"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 31
         versionCode = 1
         versionName = "1.0"
@@ -82,6 +82,7 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
 
     implementation ("com.squareup.okhttp3:okhttp:3.8.1")
+    implementation ("com.google.android.material:material:1.5.0")
  }
 
 

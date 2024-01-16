@@ -114,10 +114,13 @@
     <string name="enter_new_email">Введите новый e-mail</string>
     <string name="sending_link_text">На новый e-mail будет отправлена ссылка-подтверждение</string>
     <string name="send_link">Отправить ссылку</string>
-    
+
     <string name="password_change">Смена пароля</string>
     <string name="enter_old_password">Введите старый пароль</string>
     <string name="enter_new_password">Введите новый пароль</string>
     <string name="repeat_new_password">Повторите новый пароль</string>
+
+    <string name="my_one_ecp">Мои ЭЦП</string>
+    <string name="add_ecp">Добавить ЭЦП</string>
 
 </resources>

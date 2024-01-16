@@ -28,6 +28,9 @@
         android:theme="@style/Theme.MitraArtApp"
         tools:targetApi="31">
         <activity
+            android:name=".MyECPActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChangePasswordActivity"
             android:exported="false" />
 
@@ -40,7 +43,7 @@
             <!-- ressource file to create -->
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
 
         <activity

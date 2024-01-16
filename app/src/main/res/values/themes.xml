@@ -63,6 +63,15 @@
         <item name="lineHeight">12dp</item>
         <item name="android:letterSpacing">0</item>
 
+    </style><style name="text_style_h4_grey">
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColor">#B3262442</item>
+        <item name="android:gravity">top</item>
+        <item name="fontFamily">Roboto</item>
+        <item name="fontWeight">500</item>
+        <item name="lineHeight">12dp</item>
+        <item name="android:letterSpacing">0</item>
+
     </style><style name="text_style_h5">
         <item name="android:textSize">14dp</item>
         <item name="android:textColor">#272932</item>

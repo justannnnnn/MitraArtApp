@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="25dp"
+    android:background="@drawable/round_corners_grey"
+    >
+
+    <TextView
+        android:id="@+id/typeECPTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:gravity="bottom"
+        android:textAppearance="@style/text_style_h2"/>
+    <!--android:text="Физическое лицо"-->
+
+
+    <TextView
+        android:id="@+id/nameECPTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/typeECPTextView"
+        android:layout_marginTop="5dp"
+        android:gravity="bottom"
+        android:textAppearance="@style/text_style_h3"/>
+    <!--android:text="Иванов Иван Иванович"-->
+
+
+<TextView
+    android:id="@+id/directorECPTextView"
+    android:layout_width="195dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/nameECPTextView"
+    android:layout_marginBottom="20dp"
+    android:gravity="bottom"
+    android:textAppearance="@style/text_style_h4_grey"/>
+<!--android:text="Ген. директор Иванов И. И."-->
+
+
+<TextView
+    android:id="@+id/actsECPTextView"
+    android:layout_width="195dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:layout_marginBottom="20dp"
+    android:gravity="bottom"
+    android:textAppearance="@style/text_style_h4_grey"/>
+    <!--android:text="Действительно с 1 ноября 2022г. по 1 ноября 2023г."-->
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
